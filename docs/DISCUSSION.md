@@ -53,19 +53,19 @@ Artifacts: `evidence/run-en.json`, `evidence/run-es.json`, `evidence/run-zh.json
 
 ## Demo (required: video or illustrated walkthrough)
 
-Illustrated walkthrough — four consecutive screenshots of **one single English run** (generation 22,846 ms). The example is preloaded, so the Generate button is visible without scrolling and no file dialog is needed.
+Illustrated walkthrough — four consecutive screenshots of **one single English run** (generation 22,503 ms). The example is preloaded and there is no file uploader at all, so the only action is the Generate button, visible without scrolling. A reviewer can replace the text by pasting into the text box; no native file dialog is involved.
 
 ![1. Preloaded input and visible Generate button](https://raw.githubusercontent.com/LucianoDPerez/spark-upgrade-ledger/main/docs/shot-01-input.png)
 
-*Screenshot 1 — input with the verbatim three-line excerpt, collapsed optional uploader, and the Generate button visible in the first viewport.*
+*Screenshot 1 — input with the verbatim three-line excerpt and the Generate button visible in the first viewport. There is no Upload control.*
 
 ![2. Raw Spark output and audit summary](https://raw.githubusercontent.com/LucianoDPerez/spark-upgrade-ledger/main/docs/shot-02-raw-output.png)
 
-*Screenshot 2 — `Local generation: 22846 ms`, SkillHub audit `status=partial, claims=8, gaps=4`, raw Spark JSON expandable, and the first item with its exact source line.*
+*Screenshot 2 — `Local generation: 22503 ms`, SkillHub audit `status=partial, claims=8, gaps=4`, raw Spark JSON expandable, and the human review section below.*
 
 ![3. All three items and exported artifact](https://raw.githubusercontent.com/LucianoDPerez/spark-upgrade-ledger/main/docs/shot-03-review-approve.png)
 
-*Screenshot 3 — all three items with accept / correct / reject controls, each showing its numbered source line; `Approved: 3 of 3` and the "Download final artifact (JSON)" button.*
+*Screenshot 3 — the review controls for items C2 and C3, each with its exact numbered source line; `Approved: 3 of 3` and the "Download final artifact (JSON)" button.*
 
 ![4. Human rejects one item](https://raw.githubusercontent.com/LucianoDPerez/spark-upgrade-ledger/main/docs/shot-04-review-reject.png)
 
@@ -74,7 +74,7 @@ Illustrated walkthrough — four consecutive screenshots of **one single English
 ### Verbatim raw Spark output from that run
 
 ```json
-{"items":[{"id":"C1","title":"Adds a native CUDA backend and first model Spark-X2.6-4B","affects":"Spark-X2.6-4B","source_quote":"[1] A follow-up to #22 and #33. [cortiq](https://github.com/infosave2007/cmf) 0.8.67 adds a native CUDA backend, and Spark-X2.6-4B is the first model it runs: https://huggingface.co/infosave/Spark-X2.6-4B-turbo-CUDA-cmf","breaking":false},{"id":"C2","title":"Only the engine's path to the card is new; files are the same CMF files","affects":"engine path to the card","source_quote":"[2] The files are the same single CMF files as before; only the engine's path to the card is new. On an NVIDIA A40, the 4-bit file, with the same engine over Vulkan on the same card in parentheses:","breaking":false},{"id":"C3","title":"Past 8 192 tokens the Turbo far field takes over on CUDA, so decode speed and memory stop growing with the prompt","affects":"Turbo far field","source_quote":"[3] Past 8 192 tokens the Turbo far field takes over, on CUDA as well, so decode speed and memory stop growing with the prompt:","breaking":false}]}
+{"items":[{"id":"C1","title":"Adds a native CUDA backend and first model Spark-X2.6-4B","affects":"Spark-X2.6-4B","source_quote":"[1] A follow-up to #22 and #33. [cortiq](https://github.com/infosave2007/cmf) 0.8.67 adds a native CUDA backend, and Spark-X2.6-4B is the first model it runs: https://huggingface.co/infosave/Spark-X2.6-4B-turbo-CUDA-cmf","breaking":false},{"id":"C2","title":"Engine path to the card is new; same CMF files","affects":"engine path to the card","source_quote":"[2] The files are the same single CMF files as before; only the engine's path to the card is new. On an NVIDIA A40, the 4-bit file, with the same engine over Vulkan on the same card in parentheses:","breaking":false},{"id":"C3","title":"Past 8 192 tokens the Turbo far field takes over on CUDA, so decode speed and memory stop growing with the prompt","affects":"Turbo far field","source_quote":"[3] Past 8 192 tokens the Turbo far field takes over, on CUDA as well, so decode speed and memory stop growing with the prompt:","breaking":false}]}
 ```
 
 Also committed as `evidence/ui-raw-output.json`. The exported artifact from the human rejection is `evidence/ui-final-artifact.json`, and the full skill audit report for the same source is in `evidence/run-en.json`.

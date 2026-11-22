@@ -39,18 +39,9 @@ example_text = DEFAULT_INPUT.read_text(encoding="utf-8")
 st.text(t(profile, "step1"))
 pasted = st.text_area(t(profile, "notes"), value=example_text, height=110)
 st.caption(t(profile, "step2"))
-with st.expander(t(profile, "upload"), expanded=False):
-    uploaded = st.file_uploader(t(profile, "upload"), type=["txt"])
 
-if uploaded is not None:
-    source_text = uploaded.getvalue().decode("utf-8")
-    source_name = uploaded.name
-elif pasted.strip():
-    source_text = pasted
-    source_name = "notas.txt"
-else:
-    source_text = example_text
-    source_name = DEFAULT_INPUT.name
+source_text = pasted.strip() or example_text
+source_name = "notas.txt" if pasted.strip() else DEFAULT_INPUT.name
 
 if st.button(t(profile, "generate"), type="primary"):
     try:
