@@ -1,0 +1,23 @@
+{
+  "answer": "系统使用混合检索。build_index 函数构建索引。",
+  "sources": [
+    {
+      "title": "检索方法论文",
+      "source": "https://doi.org/10.0000/example",
+      "doc_type": "paper",
+      "chunk_id": 1,
+      "content": "系统使用向量检索与关键词检索组成的混合检索策略。",
+      "metadata": {"page_start": 3, "page_end": 3, "doi": "10.0000/example"}
+    },
+    {
+      "title": "索引构建源码",
+      "source": "scripts/build_index.py",
+      "doc_type": "python",
+      "chunk_id": 2,
+      "content": "def build_index(documents):\n    \"\"\"build_index 函数负责从文档构建索引。\"\"\"",
+      "metadata": {"line_start": 12, "line_end": 13, "symbol_name": "build_index"}
+    }
+  ],
+  "retrieval_strategy": "hybrid-rerank",
+  "answer_mode": "audit"
+}

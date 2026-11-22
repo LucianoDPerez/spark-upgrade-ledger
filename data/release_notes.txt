@@ -1,0 +1,4 @@
+URL: https://huggingface.co/XHToken/Spark-X2.6-4B/discussions/34
+cortiq 0.8.67 adds a native CUDA backend, and Spark-X2.6-4B is the first model it runs.
+The files are the same single CMF files as before; only the engine's path to the card is new.
+Past 8192 tokens the Turbo far field takes over, on CUDA as well, so decode speed and memory stop growing with the prompt.

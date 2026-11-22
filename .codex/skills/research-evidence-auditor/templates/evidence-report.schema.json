@@ -1,0 +1,203 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/research-evidence-auditor/evidence-report.schema.json",
+  "title": "EvidenceReport",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "status",
+    "answer",
+    "claims",
+    "evidence",
+    "conflicts",
+    "gaps",
+    "sources",
+    "run_meta",
+    "assessments"
+  ],
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": ["complete", "partial", "refused"]
+    },
+    "answer": {
+      "type": "string",
+      "minLength": 1
+    },
+    "claims": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/claim" }
+    },
+    "evidence": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/evidence" }
+    },
+    "conflicts": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/conflict" }
+    },
+    "gaps": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "sources": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/source" }
+    },
+    "run_meta": { "$ref": "#/$defs/run_meta" },
+    "assessments": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/assessment" }
+    }
+  },
+  "$defs": {
+    "relation": {
+      "type": "string",
+      "enum": ["supports", "contradicts", "context", "insufficient"]
+    },
+    "score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "locator": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "page_start": { "type": ["integer", "null"], "minimum": 1 },
+        "page_end": { "type": ["integer", "null"], "minimum": 1 },
+        "line_start": { "type": ["integer", "null"], "minimum": 1 },
+        "line_end": { "type": ["integer", "null"], "minimum": 1 },
+        "symbol": { "type": "string" },
+        "url": { "type": "string" }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["source_id", "title", "source_type"],
+      "properties": {
+        "source_id": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "source_type": { "type": "string", "minLength": 1 },
+        "path": { "type": "string" },
+        "url": { "type": "string" },
+        "metadata": { "type": "object" }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "evidence_id",
+        "source_id",
+        "excerpt",
+        "relation",
+        "quality_score",
+        "locator"
+      ],
+      "properties": {
+        "evidence_id": { "type": "string", "minLength": 1 },
+        "source_id": { "type": "string", "minLength": 1 },
+        "excerpt": { "type": "string", "minLength": 1 },
+        "relation": { "$ref": "#/$defs/relation" },
+        "quality_score": { "$ref": "#/$defs/score" },
+        "locator": { "$ref": "#/$defs/locator" },
+        "rationale": { "type": "string" },
+        "metadata": { "type": "object" }
+      }
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "claim_id",
+        "text",
+        "status",
+        "confidence",
+        "evidence_ids",
+        "conflict_ids"
+      ],
+      "properties": {
+        "claim_id": { "type": "string", "minLength": 1 },
+        "text": { "type": "string", "minLength": 1 },
+        "status": {
+          "type": "string",
+          "enum": ["supported", "refuted", "contested", "insufficient"]
+        },
+        "confidence": { "$ref": "#/$defs/score" },
+        "evidence_ids": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "conflict_ids": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "conflict": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "conflict_id",
+        "summary",
+        "severity",
+        "claim_ids",
+        "evidence_ids"
+      ],
+      "properties": {
+        "conflict_id": { "type": "string", "minLength": 1 },
+        "summary": { "type": "string", "minLength": 1 },
+        "severity": { "$ref": "#/$defs/score" },
+        "claim_ids": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        },
+        "evidence_ids": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 2
+        },
+        "resolution": { "type": "string" }
+      }
+    },
+    "assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "claim_id",
+        "evidence_id",
+        "relation",
+        "confidence",
+        "rationale"
+      ],
+      "properties": {
+        "claim_id": { "type": "string", "minLength": 1 },
+        "evidence_id": { "type": "string", "minLength": 1 },
+        "relation": { "$ref": "#/$defs/relation" },
+        "confidence": { "$ref": "#/$defs/score" },
+        "rationale": { "type": "string", "minLength": 1 }
+      }
+    },
+    "run_meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["retrieval_strategy", "answer_mode", "duration_ms"],
+      "properties": {
+        "retrieval_strategy": { "type": "string", "minLength": 1 },
+        "answer_mode": { "type": "string", "minLength": 1 },
+        "duration_ms": { "type": "integer", "minimum": 0 },
+        "degraded_services": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "warnings": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

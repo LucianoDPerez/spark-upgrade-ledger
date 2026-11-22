@@ -1,0 +1,91 @@
+# [HER Hack-Astron #8] [Spark × SkillHub] Upgrade Ledger — verifiable upgrade checklist
+
+## Project and track
+
+Project name: Upgrade Ledger
+Track: Developer tools (with a reusable pattern for Documents and extraction)
+
+## User and task
+
+Who uses the result, and what problem do they face?
+A developer maintaining a local Spark deployment who must decide what changes after a release. Before this tool they read long release notes by hand, copy version numbers into a migration note and hope nothing was missed. They need to know which feature each change affects and whether it is breaking.
+
+Sample input and acceptance criteria chosen before the run:
+- Input: a short attributed excerpt of public release notes from `https://huggingface.co/XHToken/Spark-X2.6-4B/discussions/34`, stored as numbered lines in `data/release_notes.txt`.
+- Acceptance criteria fixed before generation:
+  1. Every checklist item must quote one source line verbatim.
+  2. Every number in an item must exist in the source.
+  3. A source line may produce at most one item.
+  4. `breaking` must be true only when the source says so explicitly.
+  5. A human can accept, correct or reject every item.
+
+## SkillHub skill and Spark-X2.6-4B
+
+Skill name, detail page, source and version:
+`research-evidence-auditor`, https://skill.xfyun.cn/space/global/research-evidence-auditor , namespace `global`, published version `20260820.034025`. Installed with `npx @astron-team/skillhub@latest install research-evidence-auditor --namespace global --agent codex --scope project` (CLI 0.3.1). The installed package, including `scripts/audit_evidence.py` and the documented JSON contract, is committed under `.codex/skills/research-evidence-auditor/`.
+
+Agent host and steps guided by the skill:
+The entry was developed and driven by an AI coding agent (OpenCode) using the Codex skill profile. The skill guides claim splitting, source alignment, verdicts (`supported`/`refuted`/`contested`/`insufficient`) and the traceable report. The agent builds the skill's documented input JSON from the generated items and runs the skill's deterministic report builder.
+
+Model source, revision and step performed by Spark:
+`XHToken/Spark-X2.6-4B-GGUF`, file `Spark-X2.6-4B-Q4_K_M.gguf`, revision `fe31f8d64890302cc3a1d365d700357b4b75ba77`, served by llama-server at `http://localhost:8080/v1` as `spark2.6-4B`. Spark performs exactly one step: draft the strict JSON checklist from the numbered source lines. The agent does not send the release notes to any other model for generation.
+
+Other models, tools or services and their roles:
+None for inference. `requests` calls the fixed local endpoint. The skill's Python scripts are deterministic and local. No cloud API, no other LLM.
+
+## Demo (required: video or illustrated walkthrough)
+
+Video link or screenshots with captions: illustrated demo below (two consecutive screenshots of the real running app).
+
+![1. Initial state: release-note input and generate button](https://raw.githubusercontent.com/LucianoDPerez/spark-upgrade-ledger/main/docs/shot-01-input.png)
+
+*Screenshot 1 — the app starts with the default public release-note excerpt and a single action.*
+
+![2. Generated checklist with source line and human decision per item](https://raw.githubusercontent.com/LucianoDPerez/spark-upgrade-ledger/main/docs/shot-02-output.png)
+
+*Screenshot 2 — real local generation (19,110 ms), raw Spark JSON expandable, skill audit summary (`status=partial`, 5 claims, 3 gaps), and accept / correct / reject controls with the exact source line under every item.*
+
+Actual input → raw Spark output → final artifact → human review:
+- Input: `data/release_notes.txt` (3 attributed public lines).
+- Raw Spark output: verbatim JSON stored in `outputs/run-03.json` under `raw_output`.
+- Deterministic gates: exact schema, no invented numbers, exact quote grounding, negation guard, one claim per source line.
+- Skill report: `status=partial`, 5 claims (2 supported, 3 insufficient), stored under `audit` in the same artifact.
+- Human review: the Streamlit UI shows every item with accept / correct / reject and exports the final JSON.
+
+## Reproduction
+
+Installation and run steps:
+```bash
+python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+.venv/bin/python -m unittest discover -s tests -v
+.venv/bin/python run.py --output outputs/run.json
+.venv/bin/python -m streamlit run app.py
+```
+
+Hardware, runtime version, precision or quantization, prompts and settings:
+Mac, llama-server (llama.cpp), GGUF Q4_K_M, ctx 16384, `temperature=0.2`, `top_p=0.95`, `top_k=20`, `repeat_penalty=1.05`, `max_tokens=1200`, `chat_template_kwargs={"enable_thinking": false}`, single prompt in `src/prompts.py` (Spanish). Generation measured at 21,578 ms for the published run.
+
+Code or runnable example: https://github.com/LucianoDPerez/spark-upgrade-ledger
+
+## Results and limitations
+
+Observed results, evaluation method and sample size:
+18/18 unit tests pass without the model (structure, invented numbers, quote grounding, negation, duplicate quotes, cache, audit contract). One real local run produced 3 accepted items from 3 source lines; all 3 quotes are exact substrings of their numbered lines; generation took 21.6 s; the skill reported 5 claims with 2 supported and 3 insufficient. This is a development check on one short excerpt, not a blind benchmark or a user study.
+
+Failures, improvements and points requiring human review:
+- First real run produced two items with the same source quote. A deterministic dedup gate now drops the duplicate and emits a visible warning; the second run had no duplicates.
+- The skill's claim splitter fragments Spanish text (`breaking=False)`), leaving 3 claims `insufficient` even though the exact-substring gate accepted the quotes. We report the disagreement instead of hiding it.
+- `breaking` is checked for type only; its semantic correctness against the source is not proven by a deterministic gate and needs human review.
+- The negation guard is keyword-based and will miss paraphrases.
+- A developer must still confirm the final checklist against the original notes; the tool does not certify migration safety.
+
+## Contributors and disclosure
+
+Individual or team, profiles and actual contributions:
+Luciano David Perez (https://github.com/LucianoDPerez) — design, implementation, tests, local runs and documentation.
+
+How AI assisted development:
+An AI coding agent assisted with scaffolding, prompt iteration and test generation. All model outputs quoted above are verbatim local runs; none were fabricated. The skill was installed and executed locally as described.
+
+Data and dependency sources and permissions:
+`data/release_notes.txt` contains short attributed excerpts of a public Hugging Face discussion, with the source URL recorded in the file. No personal data, tokens or credentials are included.

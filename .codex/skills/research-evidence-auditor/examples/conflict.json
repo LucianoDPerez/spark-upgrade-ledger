@@ -1,0 +1,23 @@
+{
+  "answer": "模型准确率为 91%。",
+  "sources": [
+    {
+      "title": "官方评测报告",
+      "source": "reports/official.md",
+      "doc_type": "markdown",
+      "chunk_id": 1,
+      "content": "官方评测报告记录模型准确率为 91%。",
+      "metadata": {"page_start": 4, "page_end": 4}
+    },
+    {
+      "title": "复现实验报告",
+      "source": "reports/replication.md",
+      "doc_type": "markdown",
+      "chunk_id": 2,
+      "content": "复现实验报告记录模型准确率为 84%。",
+      "metadata": {"page_start": 7, "page_end": 7}
+    }
+  ],
+  "retrieval_strategy": "multi-source",
+  "answer_mode": "audit"
+}
