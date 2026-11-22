@@ -23,6 +23,7 @@ _JSON_RULES = """
 Output rules (identical in every language):
 - Work ONLY from the numbered lines given to you. No outside knowledge.
 - Every item must quote one source line VERBATIM in `source_quote`. Never translate or rewrite the quote; it must be an exact substring of a source line.
+- Copy the quote character by character: keep internal spaces inside numbers (write `8 192`, never `8192`), keep the trailing colon and keep any URL present in the line.
 - Write `title` and `affects` in {language}. Never invent versions, numbers, dates, hardware names or performance values.
 - `affects` names the feature or file affected and must be supported by the same line.
 - `breaking` is true ONLY when the source line explicitly says something changes or stops working. Otherwise false.

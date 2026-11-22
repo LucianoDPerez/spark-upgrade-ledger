@@ -49,10 +49,11 @@ public release notes (numbered lines)
 
 ## Verified evidence
 
-- Model: `spark2.6-4B`, revision `fe31f8d64890302cc3a1d365d700357b4b75ba77`, GGUF Q4_K_M, ctx 16384.
-- Skill: `global/research-evidence-auditor` v`20260820.034025`, [detail page](https://skill.xfyun.cn/space/global/research-evidence-auditor), installed with SkillHub CLI 0.3.1.
-- Unit tests: **18/18 pass**, no model needed.
-- Real local run (`outputs/run-03.json`): 3 items, all quotes are exact substrings of numbered source lines, generation **21,578 ms**, audit `status=partial` with 5 claims (2 supported, 3 insufficient).
+- Model: `spark2.6-4B`, revision `fe31f8d64890302cc3a1d365d700357b4b75ba77`, GGUF Q4_K_M, ctx 16384, file SHA256 `91cb2811aebb47ac916aa619d27d4cdd7f4143106b7917accb8ead4cd7f5cbd9`.
+- Skill: `global/research-evidence-auditor` v`20260820.034025`, [detail page](https://skill.xfyun.cn/space/global/research-evidence-auditor), installed with SkillHub CLI 0.3.1. All 22 files match the hashes in `.skillhub/metadata.json`.
+- Hardware/runtime: Apple M1, 16 GB RAM, macOS 15.5, llama.cpp `0.9.0` build `12110` commit `cd959bae9`.
+- Unit tests: **21/21 pass**, no model needed.
+- Three real local runs (`evidence/run-en.json`, `run-es.json`, `run-zh.json`): 3 items each, every quote grounded in an exact numbered source line (source text verbatim from HF discussion #34), generation 23,206 / 28,246 / 26,685 ms. The audit receives **all source lines** as evidence, never only the model's own quotes; status `partial` with 8 / 8 / 7 claims.
 - Submission deadline: 2026-11-30 23:59 UTC. Issue: https://github.com/XHToken/Spark-X2.6/issues/32
 
 ## Languages
@@ -67,9 +68,10 @@ Three real CLI runs and three UI screenshots are committed under `evidence/` and
 
 ## Limitations
 
-- One real run on one hand-written short excerpt; no blind benchmark, no user study.
-- The skill's claim splitter fragments Spanish text (e.g. `breaking=False)`), so some claims are `insufficient` even when our exact-substring gate accepted the quote. Reported, not hidden.
+- Three runs on one short excerpt of a public community discussion (not official release notes); no blind benchmark, no user study.
+- The skill's claim splitter fragments Spanish text (e.g. `breaking=False)`), so some claims are `insufficient` even when the exact-substring gate accepted the quote. Reported, not hidden.
 - The `breaking` flag is only checked for type, not for semantic correctness against the source.
 - The negation guard is a small keyword heuristic, not a semantic entailment check.
 - Inputs over 8000 chars and lists over 12 items are rejected by design.
-- AI-assisted development was used; all model outputs in `outputs/` are verbatim local runs.
+- AI-assisted development was used; all model outputs in `evidence/` are verbatim local runs.
+- The auditor receives every source line, not only the quotes selected by the model; see `src/audit.py`.

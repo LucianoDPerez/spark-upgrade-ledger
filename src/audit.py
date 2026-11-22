@@ -13,23 +13,28 @@ from .domain import ChecklistResult, GenerationError, SourceDocument
 
 
 def build_payload(result: ChecklistResult, source: SourceDocument) -> dict:
-    """Build the documented JSON input contract of the installed skill."""
+    """Build the skill's JSON contract with the WHOLE source as evidence.
+
+    The auditor must not verify the model against quotes the model itself
+    selected. Every numbered source line is supplied as an independent chunk;
+    the generated items are only the claims under audit.
+    """
     sources = []
-    for index, item in enumerate(result.items, start=1):
-        line_start, line_end = source.find_lines(item.source_quote)
+    for line in source.lines:
         sources.append(
             {
-                "title": f"{source.name} line {line_start or 'unknown'}",
+                "title": f"{source.name} line {line.number}",
                 "source": source.url or source.name,
                 "doc_type": "text",
-                "chunk_id": index,
-                "content": item.source_quote,
+                "chunk_id": line.number,
+                "content": line.text,
                 "score": 1.0,
-                "metadata": {"line_start": line_start, "line_end": line_end},
+                "metadata": {"line_start": line.number, "line_end": line.number},
             }
         )
     answer = "\n".join(
-        f"{item.id}: {item.title} (affects {item.affects}; breaking={item.breaking})"
+        f"{item.id}: {item.title} (affects {item.affects}; breaking={item.breaking}; "
+        f"source line {item.line_start})"
         for item in result.items
     )
     return {

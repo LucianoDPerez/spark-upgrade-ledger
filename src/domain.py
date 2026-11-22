@@ -20,6 +20,11 @@ def normalize(text: str) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
+def normalize_quote(text: str) -> str:
+    """Strip the prompt's [line-number] prefix, then whitespace-normalise."""
+    return normalize(re.sub(r"^\[\d+\]\s*", "", text.strip()))
+
+
 def cache_key(*parts: str) -> str:
     payload = "\x1f".join(normalize(p) for p in parts)
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
@@ -47,7 +52,7 @@ class SourceDocument:
         return normalize(" ".join(line.text for line in self.lines))
 
     def find_lines(self, quote: str) -> tuple[int, int]:
-        needle = normalize(quote)
+        needle = normalize_quote(quote)
         for line in self.lines:
             if needle in normalize(line.text):
                 return line.number, line.number

@@ -37,9 +37,10 @@ def get_usecase() -> BuildChecklistUseCase:
 example_text = DEFAULT_INPUT.read_text(encoding="utf-8")
 
 st.text(t(profile, "step1"))
-pasted = st.text_area(t(profile, "notes"), value=example_text, height=180)
+pasted = st.text_area(t(profile, "notes"), value=example_text, height=110)
 st.caption(t(profile, "step2"))
-uploaded = st.file_uploader(t(profile, "upload"), type=["txt"])
+with st.expander(t(profile, "upload"), expanded=False):
+    uploaded = st.file_uploader(t(profile, "upload"), type=["txt"])
 
 if uploaded is not None:
     source_text = uploaded.getvalue().decode("utf-8")

@@ -21,7 +21,7 @@ HER Hack-Astron #8 entry. Turns public Spark-X2.6 release notes into an upgrade 
 - `src/prompts.py` — shared user prompt. Output is strict JSON with `source_quote` per item. No invented numbers, no diagnoses.
 - `src/llm_client.py` — `LLMPort` protocol + `LlamaServerClient`. Fixed URL only (no SSRF). Always send `chat_template_kwargs: {enable_thinking: False}` — Spark-X2.6 fills the token budget with reasoning otherwise and returns empty content.
 - `src/validator.py` — deterministic fail-closed gates: exact schema, no invented numbers, exact quote grounding, basic negation guard. Reject before cache and before screen.
-- `src/audit.py` — adapter to the installed SkillHub skill. Builds the documented JSON contract and runs the skill's `scripts/audit_evidence.py`. Fail closed on bad input or bad output.
+- `src/audit.py` — adapter to the installed SkillHub skill. Builds the documented JSON contract with **every source line as evidence** (never only the model's own quotes) and runs the skill's `scripts/audit_evidence.py`. Fail closed on bad input or bad output.
 - `src/usecase.py` — `BuildChecklistUseCase.execute()` is the ONLY path to the LLM. Validate -> cache -> rate-limit -> LLM -> validate -> cache -> audit. Idempotent by content hash.
 - `src/cache.py`, `src/ratelimit.py` — thread-safe, TTL / min-interval. Fail closed.
 - UI (`app.py`, `run.py`) — thin layers. No business logic, no direct `requests` to the LLM. Human accepts, corrects or rejects each item.

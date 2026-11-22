@@ -7,81 +7,106 @@
   "items": [
     {
       "id": "C1",
-      "title": "新增原生 CUDA 后端，Spark-X2.6-4B 是首个运行该后端的模型",
-      "affects": "cortiq 0.8.67 的 CUDA 后端与 Spark-X2.6-4B",
-      "source_quote": "cortiq 0.8.67 adds a native CUDA backend, and Spark-X2.6-4B is the first model it runs.",
+      "title": "新增原生 CUDA 后端，Spark-X2.6-4B 为首个可运行的模型",
+      "affects": "原生 CUDA 后端 / Spark-X2.6-4B",
+      "source_quote": "[1] A follow-up to #22 and #33. [cortiq](https://github.com/infosave2007/cmf) 0.8.67 adds a native CUDA backend, and Spark-X2.6-4B is the first model it runs: https://huggingface.co/infosave/Spark-X2.6-4B-turbo-CUDA-cmf",
       "breaking": false,
       "line_start": 1,
       "line_end": 1
     },
     {
       "id": "C2",
-      "title": "文件仍为与之前相同的单个 CMF 文件，仅引擎到显卡的路径发生变化",
-      "affects": "CMF 文件及引擎到显卡的路径",
-      "source_quote": "The files are the same single CMF files as before; only the engine's path to the card is new.",
+      "title": "文件仍为原有的单一 CMF 文件，仅引擎到显卡的路径发生变化",
+      "affects": "CMF 文件 / 引擎显卡路径",
+      "source_quote": "[2] The files are the same single CMF files as before; only the engine's path to the card is new. On an NVIDIA A40, the 4-bit file, with the same engine over Vulkan on the same card in parentheses:",
       "breaking": false,
       "line_start": 2,
       "line_end": 2
     },
     {
       "id": "C3",
-      "title": "超过 8192 token 后 Turbo 远场接管，CUDA 上同样如此，因此解码速度和内存不再随提示词增长",
-      "affects": "Turbo 远场、CUDA 解码速度与内存",
-      "source_quote": "Past 8192 tokens the Turbo far field takes over, on CUDA as well, so decode speed and memory stop growing with the prompt.",
+      "title": "超过 8 192 个 token 后 Turbo 远场接管，CUDA 下解码速度与内存不再随提示词增长",
+      "affects": "Turbo 远场 / CUDA 解码速度与内存",
+      "source_quote": "[3] Past 8 192 tokens the Turbo far field takes over, on CUDA as well, so decode speed and memory stop growing with the prompt:",
       "breaking": false,
       "line_start": 3,
       "line_end": 3
     }
   ],
-  "raw_output": "{\"items\":[{\"id\":\"C1\",\"title\":\"新增原生 CUDA 后端，Spark-X2.6-4B 是首个运行该后端的模型\",\"affects\":\"cortiq 0.8.67 的 CUDA 后端与 Spark-X2.6-4B\",\"source_quote\":\"cortiq 0.8.67 adds a native CUDA backend, and Spark-X2.6-4B is the first model it runs.\",\"breaking\":false},{\"id\":\"C2\",\"title\":\"文件仍为与之前相同的单个 CMF 文件，仅引擎到显卡的路径发生变化\",\"affects\":\"CMF 文件及引擎到显卡的路径\",\"source_quote\":\"The files are the same single CMF files as before; only the engine's path to the card is new.\",\"breaking\":false},{\"id\":\"C3\",\"title\":\"超过 8192 token 后 Turbo 远场接管，CUDA 上同样如此，因此解码速度和内存不再随提示词增长\",\"affects\":\"Turbo 远场、CUDA 解码速度与内存\",\"source_quote\":\"Past 8192 tokens the Turbo far field takes over, on CUDA as well, so decode speed and memory stop growing with the prompt.\",\"breaking\":false}]}",
+  "raw_output": "{\"items\":[{\"id\":\"C1\",\"title\":\"新增原生 CUDA 后端，Spark-X2.6-4B 为首个可运行的模型\",\"affects\":\"原生 CUDA 后端 / Spark-X2.6-4B\",\"source_quote\":\"[1] A follow-up to #22 and #33. [cortiq](https://github.com/infosave2007/cmf) 0.8.67 adds a native CUDA backend, and Spark-X2.6-4B is the first model it runs: https://huggingface.co/infosave/Spark-X2.6-4B-turbo-CUDA-cmf\",\"breaking\":false},{\"id\":\"C2\",\"title\":\"文件仍为原有的单一 CMF 文件，仅引擎到显卡的路径发生变化\",\"affects\":\"CMF 文件 / 引擎显卡路径\",\"source_quote\":\"[2] The files are the same single CMF files as before; only the engine's path to the card is new. On an NVIDIA A40, the 4-bit file, with the same engine over Vulkan on the same card in parentheses:\",\"breaking\":false},{\"id\":\"C3\",\"title\":\"超过 8 192 个 token 后 Turbo 远场接管，CUDA 下解码速度与内存不再随提示词增长\",\"affects\":\"Turbo 远场 / CUDA 解码速度与内存\",\"source_quote\":\"[3] Past 8 192 tokens the Turbo far field takes over, on CUDA as well, so decode speed and memory stop growing with the prompt:\",\"breaking\":false}]}",
   "warnings": [],
-  "duration_ms": 21420,
+  "duration_ms": 26685,
   "audit": {
     "status": "partial",
-    "answer": "C1: 新增原生 CUDA 后端，Spark-X2.6-4B 是首个运行该后端的模型 (affects cortiq 0.8.67 的 CUDA 后端与 Spark-X2.6-4B; breaking=False)\nC2: 文件仍为与之前相同的单个 CMF 文件，仅引擎到显卡的路径发生变化 (affects CMF 文件及引擎到显卡的路径; breaking=False)\nC3: 超过 8192 token 后 Turbo 远场接管，CUDA 上同样如此，因此解码速度和内存不再随提示词增长 (affects Turbo 远场、CUDA 解码速度与内存; breaking=False)",
+    "answer": "C1: 新增原生 CUDA 后端，Spark-X2.6-4B 为首个可运行的模型 (affects 原生 CUDA 后端 / Spark-X2.6-4B; breaking=False; source line 1)\nC2: 文件仍为原有的单一 CMF 文件，仅引擎到显卡的路径发生变化 (affects CMF 文件 / 引擎显卡路径; breaking=False; source line 2)\nC3: 超过 8 192 个 token 后 Turbo 远场接管，CUDA 下解码速度与内存不再随提示词增长 (affects Turbo 远场 / CUDA 解码速度与内存; breaking=False; source line 3)",
     "claims": [
       {
-        "claim_id": "claim-c0626ac7b129dfae",
-        "text": "C1: 新增原生 CUDA 后端，Spark-X2.6-4B 是首个运行该后端的模型 (affects cortiq 0.8.67 的 CUDA 后端与 Spark-X2.6-4B",
+        "claim_id": "claim-eadf1213c047841b",
+        "text": "C1: 新增原生 CUDA 后端，Spark-X2.6-4B 为首个可运行的模型 (affects 原生 CUDA 后端 / Spark-X2.6-4B",
         "status": "supported",
         "confidence": 0.7,
         "evidence_ids": [
-          "evidence-369cea65b847ab60"
+          "evidence-3c53afe0df3cfffb",
+          "evidence-135747c9f2ede628"
         ],
         "conflict_ids": []
       },
       {
-        "claim_id": "claim-6d126d49e373994e",
-        "text": "breaking=False)",
+        "claim_id": "claim-ad5516ed568e7417",
+        "text": "breaking=False",
         "status": "insufficient",
         "confidence": 0.0,
         "evidence_ids": [],
         "conflict_ids": []
       },
       {
-        "claim_id": "claim-960cb70b97225ce0",
-        "text": "C2: 文件仍为与之前相同的单个 CMF 文件，仅引擎到显卡的路径发生变化 (affects CMF 文件及引擎到显卡的路径",
+        "claim_id": "claim-ac362d59ade1d05a",
+        "text": "source line 1)",
         "status": "insufficient",
         "confidence": 0.0,
         "evidence_ids": [],
         "conflict_ids": []
       },
       {
-        "claim_id": "claim-7e09bd020e7d4029",
-        "text": "C3: 超过 8192 token 后 Turbo 远场接管，CUDA 上同样如此，因此解码速度和内存不再随提示词增长 (affects Turbo 远场、CUDA 解码速度与内存",
+        "claim_id": "claim-57180f1deb761de2",
+        "text": "C2: 文件仍为原有的单一 CMF 文件，仅引擎到显卡的路径发生变化 (affects CMF 文件 / 引擎显卡路径",
+        "status": "insufficient",
+        "confidence": 0.0,
+        "evidence_ids": [],
+        "conflict_ids": []
+      },
+      {
+        "claim_id": "claim-4c84ac013b15fac2",
+        "text": "source line 2)",
+        "status": "insufficient",
+        "confidence": 0.0,
+        "evidence_ids": [],
+        "conflict_ids": []
+      },
+      {
+        "claim_id": "claim-f4002f8f4bba2ae3",
+        "text": "C3: 超过 8 192 个 token 后 Turbo 远场接管，CUDA 下解码速度与内存不再随提示词增长 (affects Turbo 远场 / CUDA 解码速度与内存",
         "status": "supported",
         "confidence": 0.7,
         "evidence_ids": [
-          "evidence-f0fa5d28f0d3e3d2"
+          "evidence-0d1bbd90be2cb880"
         ],
+        "conflict_ids": []
+      },
+      {
+        "claim_id": "claim-12be4014e19da46a",
+        "text": "source line 3)",
+        "status": "insufficient",
+        "confidence": 0.0,
+        "evidence_ids": [],
         "conflict_ids": []
       }
     ],
     "evidence": [
       {
-        "evidence_id": "evidence-369cea65b847ab60",
+        "evidence_id": "evidence-3c53afe0df3cfffb",
         "source_id": "source-c7fdcc9afdd317f9",
-        "excerpt": "cortiq 0.8.67 adds a native CUDA backend, and Spark-X2.6-4B is the first model it runs.",
+        "excerpt": "A follow-up to #22 and #33. [cortiq](https://github.com/infosave2007/cmf) 0.8.67 adds a native CUDA backend, and Spark-X2.6-4B is the first model it runs: https://huggingface.co/infosave/Spark-X2.6-4B-turbo-CUDA-cmf",
         "relation": "context",
         "quality_score": 0.7775,
         "locator": {
@@ -105,9 +130,9 @@
         }
       },
       {
-        "evidence_id": "evidence-d7003997405a1f62",
+        "evidence_id": "evidence-135747c9f2ede628",
         "source_id": "source-113de3c767f18323",
-        "excerpt": "The files are the same single CMF files as before; only the engine's path to the card is new.",
+        "excerpt": "The files are the same single CMF files as before; only the engine's path to the card is new. On an NVIDIA A40, the 4-bit file, with the same engine over Vulkan on the same card in parentheses:",
         "relation": "context",
         "quality_score": 0.7775,
         "locator": {
@@ -131,9 +156,9 @@
         }
       },
       {
-        "evidence_id": "evidence-f0fa5d28f0d3e3d2",
+        "evidence_id": "evidence-0d1bbd90be2cb880",
         "source_id": "source-4d68d10db122b189",
-        "excerpt": "Past 8192 tokens the Turbo far field takes over, on CUDA as well, so decode speed and memory stop growing with the prompt.",
+        "excerpt": "Past 8 192 tokens the Turbo far field takes over, on CUDA as well, so decode speed and memory stop growing with the prompt:",
         "relation": "context",
         "quality_score": 0.7775,
         "locator": {
@@ -159,8 +184,11 @@
     ],
     "conflicts": [],
     "gaps": [
-      "结论“breaking=False)”缺少足以支持或反驳的证据。",
-      "结论“C2: 文件仍为与之前相同的单个 CMF 文件，仅引擎到显卡的路径发生变化 (affects CMF 文件及引擎到显卡的路径”缺少足以支持或反驳的证据。"
+      "结论“breaking=False”缺少足以支持或反驳的证据。",
+      "结论“source line 1)”缺少足以支持或反驳的证据。",
+      "结论“C2: 文件仍为原有的单一 CMF 文件，仅引擎到显卡的路径发生变化 (affects CMF 文件 / 引擎显卡路径”缺少足以支持或反驳的证据。",
+      "结论“source line 2)”缺少足以支持或反驳的证据。",
+      "结论“source line 3)”缺少足以支持或反驳的证据。"
     ],
     "sources": [
       {
@@ -191,27 +219,37 @@
     "run_meta": {
       "retrieval_strategy": "exact_line",
       "answer_mode": "generated_checklist",
-      "duration_ms": 21420,
+      "duration_ms": 26685,
       "degraded_services": [],
       "warnings": [
-        "claim claim-6d126d49e373994e has no aligned evidence",
-        "claim claim-960cb70b97225ce0 has no aligned evidence"
+        "claim claim-ad5516ed568e7417 has no aligned evidence",
+        "claim claim-ac362d59ade1d05a has no aligned evidence",
+        "claim claim-57180f1deb761de2 has no aligned evidence",
+        "claim claim-4c84ac013b15fac2 has no aligned evidence",
+        "claim claim-12be4014e19da46a has no aligned evidence"
       ]
     },
     "assessments": [
       {
-        "claim_id": "claim-c0626ac7b129dfae",
-        "evidence_id": "evidence-369cea65b847ab60",
+        "claim_id": "claim-eadf1213c047841b",
+        "evidence_id": "evidence-3c53afe0df3cfffb",
         "relation": "supports",
         "confidence": 0.7,
-        "rationale": "结论与证据包含相同的明确数值（共同关键词：0.8、67、cortiq、cuda、spark-x2.6-4b；相同数值：0.8、4）"
+        "rationale": "结论与证据包含相同的明确数值（共同关键词：cuda、spark-x2.6-4b；相同数值：4）"
       },
       {
-        "claim_id": "claim-7e09bd020e7d4029",
-        "evidence_id": "evidence-f0fa5d28f0d3e3d2",
+        "claim_id": "claim-eadf1213c047841b",
+        "evidence_id": "evidence-135747c9f2ede628",
+        "relation": "insufficient",
+        "confidence": 0.288875,
+        "rationale": "证据与结论相关，但不足以确定支持或反驳（相同数值：4）"
+      },
+      {
+        "claim_id": "claim-f4002f8f4bba2ae3",
+        "evidence_id": "evidence-0d1bbd90be2cb880",
         "relation": "supports",
         "confidence": 0.7,
-        "rationale": "结论与证据包含相同的明确数值（共同关键词：8192、cuda、turbo；相同数值：8192）"
+        "rationale": "结论与证据包含相同的明确数值（共同关键词：192、8、cuda、turbo；相同数值：192、8）"
       }
     ]
   }

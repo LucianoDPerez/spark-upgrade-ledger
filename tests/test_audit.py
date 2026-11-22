@@ -30,8 +30,10 @@ class AuditTests(unittest.TestCase):
         payload = build_payload(self.result, self.source)
         self.assertIn("answer", payload)
         self.assertEqual(payload["mode"], "local")
+        self.assertEqual(len(payload["sources"]), len(self.source.lines))
         self.assertEqual(payload["sources"][0]["metadata"]["line_start"], 1)
-        self.assertEqual(payload["sources"][0]["content"], self.result.items[0].source_quote)
+        self.assertEqual(payload["sources"][0]["content"], self.source.lines[0].text)
+        self.assertNotIn("source_quote", payload)
 
     @unittest.skipUnless(SKILL_AUDIT_SCRIPT.is_file(), "SkillHub skill not installed")
     def test_skill_produces_contract_report(self):

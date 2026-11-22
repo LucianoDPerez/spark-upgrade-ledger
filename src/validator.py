@@ -6,7 +6,7 @@ import json
 import re
 
 from .config import MAX_ITEMS
-from .domain import ChecklistItem, ValidationError, ValidationOutcome, normalize
+from .domain import ChecklistItem, ValidationError, ValidationOutcome, normalize, normalize_quote
 
 _ITEM_KEYS = {"id", "title", "affects", "source_quote", "breaking"}
 _NUMBER_RE = re.compile(r"\d+(?:[.,]\d+)*")
@@ -85,12 +85,13 @@ def validate_draft(payload: dict, source_text: str) -> ValidationOutcome:
         if not isinstance(breaking, bool):
             raise ValidationError(f"Item {item_id}: 'breaking' must be boolean.")
 
-        if normalize(quote) not in source_norm:
+        grounded = normalize_quote(quote)
+        if grounded not in source_norm:
             raise ValidationError(f"Item {item_id}: source_quote is not grounded in the source.")
-        if normalize(quote) in seen_quotes:
+        if grounded in seen_quotes:
             warnings.append(f"Item {item_id}: duplicate source_quote dropped (one claim per line).")
             continue
-        seen_quotes.add(normalize(quote))
+        seen_quotes.add(grounded)
 
         for number in _NUMBER_RE.findall(f"{title} {affects}"):
             if number not in source_numbers:
