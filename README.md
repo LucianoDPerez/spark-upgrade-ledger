@@ -55,6 +55,10 @@ public release notes (numbered lines)
 - Real local run (`outputs/run-03.json`): 3 items, all quotes are exact substrings of numbered source lines, generation **21,578 ms**, audit `status=partial` with 5 claims (2 supported, 3 insufficient).
 - Submission deadline: 2026-11-30 23:59 UTC. Issue: https://github.com/XHToken/Spark-X2.6/issues/32
 
+## Repository access
+
+`main` is protected: changes require a pull request with 1 approving review from the code owner (`.github/CODEOWNERS` -> `@LucianoDPerez`), stale approvals are dismissed, the last push must be approved, conversations must be resolved, force pushes and branch deletions are blocked. Only the owner has write access to the repository. Only the owner can bypass the rule.
+
 ## Limitations
 
 - One real run on one hand-written short excerpt; no blind benchmark, no user study.
