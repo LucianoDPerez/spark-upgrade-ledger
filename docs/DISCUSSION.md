@@ -30,7 +30,7 @@ Sample input and acceptance criteria chosen before the run:
 ## SkillHub skill and Spark-X2.6-4B
 
 Skill name, detail page, source and version:
-`research-evidence-auditor`, https://skill.xfyun.cn/space/global/research-evidence-auditor , namespace `global`, published version `20260820.034025`. Installed with `npx @astron-team/skillhub@latest install research-evidence-auditor --namespace global --agent codex --scope project` (SkillHub CLI 0.3.1). The installed package is committed under `.codex/skills/research-evidence-auditor/`. All 22 files match the SHA256 values in its own `.skillhub/metadata.json` (verified: 0 mismatches).
+`research-evidence-auditor`, https://skill.xfyun.cn/space/global/research-evidence-auditor , namespace `global`, published version `20260820.034025`. Installed with `npx @astron-team/skillhub@latest install research-evidence-auditor --namespace global --agent codex --scope project` (SkillHub CLI 0.3.1). The installed package is committed under `.codex/skills/research-evidence-auditor/`. Verified with `diff -r` against a fresh install from the registry: all 22 content files are byte-identical; only `.skillhub/metadata.json` differs in `agent` (`codex` vs `custom`) and `installedAt`.
 
 Agent host and steps guided by the skill:
 The entry was developed and driven by an AI coding agent (OpenCode) using the Codex skill profile. The skill guides claim splitting, source alignment, verdicts (`supported`/`refuted`/`contested`/`insufficient`) and the traceable report. The agent builds the skill's documented input JSON and runs its deterministic report builder.
@@ -61,7 +61,7 @@ Artifacts: `evidence/run-en.json`, `evidence/run-es.json`, `evidence/run-zh.json
 
 ## Demo (required: video or illustrated walkthrough)
 
-Illustrated walkthrough — four consecutive screenshots of **one single English run** (generation 21,063 ms). The example is preloaded and there is no file uploader at all, so the only action is the Generate button, visible without scrolling. A reviewer can replace the text by pasting into the text box; no native file dialog is involved.
+Illustrated walkthrough — four consecutive screenshots of **one single English run** (generation 22,751 ms). The example is preloaded and there is no file uploader at all, so the only action is the Generate button, visible without scrolling. A reviewer can replace the text by pasting into the text box; no native file dialog is involved.
 
 ![1. Preloaded input and visible Generate button](https://raw.githubusercontent.com/LucianoDPerez/spark-upgrade-ledger/main/docs/shot-01-input.png)
 
@@ -69,20 +69,20 @@ Illustrated walkthrough — four consecutive screenshots of **one single English
 
 ![2. Raw Spark output and audit summary](https://raw.githubusercontent.com/LucianoDPerez/spark-upgrade-ledger/main/docs/shot-02-raw-output.png)
 
-*Screenshot 2 — `Local generation: 21063 ms`, SkillHub audit `status=partial, claims=8, gaps=4`, raw Spark JSON expandable, and the human review section below. At this point the counter reads `Approved: 0 of 3`: nothing is approved implicitly.*
+*Screenshot 2 — `Local generation: 22751 ms`, SkillHub audit `status=partial, claims=8, gaps=4`, raw Spark JSON expandable, and the human review section below.*
 
 ![3. All three items and exported artifact](https://raw.githubusercontent.com/LucianoDPerez/spark-upgrade-ledger/main/docs/shot-03-review-approve.png)
 
-*Screenshot 3 — explicit human decisions on the review controls: C2 marked `reject`, C3 marked `accept`, each with its exact numbered source line. The counter now reads `Approved: 2 of 3` (C1 was also explicitly accepted above the fold).*
+*Screenshot 3 — the same run before any decision: all three radios unselected, `Approved: 0 of 3`, and both export buttons. Nothing is approved implicitly.*
 
 ![4. Human rejects one item](https://raw.githubusercontent.com/LucianoDPerez/spark-upgrade-ledger/main/docs/shot-04-review-reject.png)
 
-*Screenshot 4 — the end of the same run: C2 rejected, C3 accepted, `Approved: 2 of 3`, and two export buttons. `evidence/ui-final-artifact.json` contains only the two approved items; `evidence/ui-review-log.json` contains all three items with their original text, decision, correction and approval flag, including the rejected C2.*
+*Screenshot 4 — the same run after explicit decisions: C2 marked `reject`, C3 marked `accept` (C1 was accepted above the fold), `Approved: 2 of 3`, and both export buttons. `evidence/ui-final-artifact.json` contains only the two approved items; `evidence/ui-review-log.json` contains all three items with their original text, decision, correction and approval flag, including the rejected C2.*
 
 ### Verbatim raw Spark output from that run
 
 ```json
-{"items":[{"id":"C1","title":"Adds a native CUDA backend and first model Spark-X2.6-4B","affects":"Spark-X2.6-4B","source_quote":"[1] A follow-up to #22 and #33. [cortiq](https://github.com/infosave2007/cmf) 0.8.67 adds a native CUDA backend, and Spark-X2.6-4B is the first model it runs: https://huggingface.co/infosave/Spark-X2.6-4B-turbo-CUDA-cmf","breaking":false},{"id":"C2","title":"New engine path to the card for the same CMF files","affects":"CMF files","source_quote":"[2] The files are the same single CMF files as before; only the engine's path to the card is new. On an NVIDIA A40, the 4-bit file, with the same engine over Vulkan on the same card in parentheses:","breaking":false},{"id":"C3","title":"Past 8 192 tokens the Turbo far field takes over on CUDA, stopping decode speed and memory growth with the prompt","affects":"Turbo far field","source_quote":"[3] Past 8 192 tokens the Turbo far field takes over, on CUDA as well, so decode speed and memory stop growing with the prompt:","breaking":false}]}
+{"items":[{"id":"C1","title":"Adds a native CUDA backend and first model Spark-X2.6-4B","affects":"Spark-X2.6-4B","source_quote":"[1] A follow-up to #22 and #33. [cortiq](https://github.com/infosave2007/cmf) 0.8.67 adds a native CUDA backend, and Spark-X2.6-4B is the first model it runs: https://huggingface.co/infosave/Spark-X2.6-4B-turbo-CUDA-cmf","breaking":false},{"id":"C2","title":"Only the engine's path to the card is new; files are the same single CMF files","affects":"engine path to the card","source_quote":"[2] The files are the same single CMF files as before; only the engine's path to the card is new. On an NVIDIA A40, the 4-bit file, with the same engine over Vulkan on the same card in parentheses:","breaking":false},{"id":"C3","title":"Past 8 192 tokens the Turbo far field takes over on CUDA, so decode speed and memory stop growing with the prompt","affects":"Turbo far field on CUDA","source_quote":"[3] Past 8 192 tokens the Turbo far field takes over, on CUDA as well, so decode speed and memory stop growing with the prompt:","breaking":false}]}
 ```
 
 Also committed as `evidence/ui-raw-output.json`. The exported artifact from the human rejection is `evidence/ui-final-artifact.json`, and the full skill audit report for the same source is in `evidence/run-en.json`.
@@ -104,7 +104,25 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 ```
 
 Hardware/runtime/precision/settings:
-Apple M1, 16 GB RAM, macOS 15.5; llama.cpp `0.9.0`, build `12110`, commit `cd959bae9`; GGUF Q4_K_M, SHA256 `91cb2811aebb47ac916aa619d27d4cdd7f4143106b7917accb8ead4cd7f5cbd9`, ctx 16384; `temperature=0.2`, `top_p=0.95`, `top_k=20`, `repeat_penalty=1.05`, `max_tokens=1200`, `chat_template_kwargs={"enable_thinking": false}`. Prompts: `src/prompts.py` + `src/languages.py`.
+GGUF Q4_K_M, SHA256 `91cb2811aebb47ac916aa619d27d4cdd7f4143106b7917accb8ead4cd7f5cbd9`, ctx 16384;
+
+```text
+$ sw_vers
+ProductName:		macOS
+ProductVersion:		15.5
+BuildVersion:		24F74
+
+$ sysctl -n machdep.cpu.brand_string
+Apple M1
+$ sysctl -n hw.memsize
+17179869184          # 16 GB
+
+$ llama-server --version
+version: 0.9.0 (build 12110, commit cd959bae9)
+built with AppleClang 17.0.0.17000604 for Darwin arm64
+```
+
+Inference settings: `temperature=0.2`, `top_p=0.95`, `top_k=20`, `repeat_penalty=1.05`, `max_tokens=1200`, `chat_template_kwargs={"enable_thinking": false}`. Prompts: `src/prompts.py` + `src/languages.py`.
 
 Code: https://github.com/LucianoDPerez/spark-upgrade-ledger
 
@@ -118,6 +136,7 @@ Failures, improvements, human review:
 - The skill's claim splitter fragments Spanish text (`breaking=False)`), leaving several claims `insufficient` even when the exact-substring gate accepted the quote. Reported, not hidden.
 - `breaking` is type-checked only; its semantic correctness needs human review.
 - The negation guard is keyword-based and misses paraphrases.
+- `source_quote` is the whole numbered source line (exact substring after stripping the `[N]` prefix). That makes grounding a check against a full line, not against a short fragment of the changed fact; a shorter evidence span would be a stronger check and is future work.
 - The excerpt is a community discussion, not an official release note; a real migration would need a longer, authoritative source.
 - A developer must confirm the final checklist against the original notes; this tool does not certify migration safety.
 

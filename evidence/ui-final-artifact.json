@@ -17,13 +17,13 @@
     },
     {
       "id": "C3",
-      "title": "Past 8 192 tokens the Turbo far field takes over on CUDA, stopping decode speed and memory growth with the prompt",
-      "affects": "Turbo far field",
+      "title": "Past 8 192 tokens the Turbo far field takes over on CUDA, so decode speed and memory stop growing with the prompt",
+      "affects": "Turbo far field on CUDA",
       "source_quote": "[3] Past 8 192 tokens the Turbo far field takes over, on CUDA as well, so decode speed and memory stop growing with the prompt:",
       "breaking": false,
       "line_start": 3,
       "line_end": 3,
-      "generated_title": "Past 8 192 tokens the Turbo far field takes over on CUDA, stopping decode speed and memory growth with the prompt",
+      "generated_title": "Past 8 192 tokens the Turbo far field takes over on CUDA, so decode speed and memory stop growing with the prompt",
       "decision": "accept",
       "corrected_text": ""
     }
