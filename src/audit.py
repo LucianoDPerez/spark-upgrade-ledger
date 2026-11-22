@@ -28,7 +28,6 @@ def build_payload(result: ChecklistResult, source: SourceDocument) -> dict:
                 "doc_type": "text",
                 "chunk_id": line.number,
                 "content": line.text,
-                "score": 1.0,
                 "metadata": {"line_start": line.number, "line_end": line.number},
             }
         )

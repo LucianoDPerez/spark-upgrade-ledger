@@ -52,16 +52,11 @@ class BuildChecklistUseCase:
         started = time.monotonic()
         raw = self.llm.complete(profile.system_prompt, build_user_prompt(source.as_prompt()))
         duration_ms = int((time.monotonic() - started) * 1000)
-        outcome = validate_draft(parse_draft(raw), source.normalized_text())
-        items = tuple(
-            replace(item, line_start=source.find_lines(item.source_quote)[0],
-                    line_end=source.find_lines(item.source_quote)[1])
-            for item in outcome.items
-        )
+        outcome = validate_draft(parse_draft(raw), source)
 
         result = ChecklistResult(
             source_name=source.name,
-            items=items,
+            items=outcome.items,
             raw_output=raw,
             lang=profile.code,
             warnings=outcome.warnings,

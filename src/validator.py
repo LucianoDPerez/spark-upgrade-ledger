@@ -6,7 +6,14 @@ import json
 import re
 
 from .config import MAX_ITEMS
-from .domain import ChecklistItem, ValidationError, ValidationOutcome, normalize, normalize_quote
+from .domain import (
+    ChecklistItem,
+    SourceDocument,
+    ValidationError,
+    ValidationOutcome,
+    normalize,
+    normalize_quote,
+)
 
 _ITEM_KEYS = {"id", "title", "affects", "source_quote", "breaking"}
 _NUMBER_RE = re.compile(r"\d+(?:[.,]\d+)*")
@@ -49,11 +56,12 @@ def _limited_text(value: object, field: str, limit: int = 240) -> str:
     return text
 
 
-def validate_draft(payload: dict, source_text: str) -> ValidationOutcome:
+def validate_draft(payload: dict, source: SourceDocument) -> ValidationOutcome:
     """Validate structure, invented numbers, quote grounding and negation.
 
-    Repeated quotes are dropped deterministically and reported as warnings:
-    one source line must not produce two checklist items.
+    Grounding is line-level: a quote must match exactly ONE original line.
+    Quotes spanning two lines are rejected, line numbers are assigned here,
+    and a second item from the same line is dropped with a warning.
     """
     items_raw = payload.get("items")
     if not isinstance(items_raw, list):
@@ -61,10 +69,10 @@ def validate_draft(payload: dict, source_text: str) -> ValidationOutcome:
     if not 1 <= len(items_raw) <= MAX_ITEMS:
         raise ValidationError(f"'items' must have 1 to {MAX_ITEMS} entries.")
 
-    source_norm = normalize(source_text)
+    source_norm = source.normalized_text()
     source_numbers = set(_NUMBER_RE.findall(source_norm))
     seen_ids: set[str] = set()
-    seen_quotes: set[str] = set()
+    seen_lines: set[int] = set()
     items: list[ChecklistItem] = []
     warnings: list[str] = []
 
@@ -86,12 +94,20 @@ def validate_draft(payload: dict, source_text: str) -> ValidationOutcome:
             raise ValidationError(f"Item {item_id}: 'breaking' must be boolean.")
 
         grounded = normalize_quote(quote)
-        if grounded not in source_norm:
-            raise ValidationError(f"Item {item_id}: source_quote is not grounded in the source.")
-        if grounded in seen_quotes:
-            warnings.append(f"Item {item_id}: duplicate source_quote dropped (one claim per line).")
+        matched_lines = [
+            line for line in source.lines if grounded in normalize(line.text)
+        ]
+        if not matched_lines:
+            raise ValidationError(f"Item {item_id}: source_quote is not grounded in a single line.")
+        if len(matched_lines) > 1:
+            raise ValidationError(f"Item {item_id}: source_quote is ambiguous across lines.")
+        line_start = matched_lines[0].number
+        if line_start <= 0:
+            raise ValidationError(f"Item {item_id}: invalid source line number.")
+        if line_start in seen_lines:
+            warnings.append(f"Item {item_id}: duplicate source line dropped (one claim per line).")
             continue
-        seen_quotes.add(grounded)
+        seen_lines.add(line_start)
 
         for number in _NUMBER_RE.findall(f"{title} {affects}"):
             if number not in source_numbers:
@@ -107,6 +123,8 @@ def validate_draft(payload: dict, source_text: str) -> ValidationOutcome:
                 affects=affects,
                 source_quote=quote,
                 breaking=breaking,
+                line_start=line_start,
+                line_end=line_start,
             )
         )
     if not items:

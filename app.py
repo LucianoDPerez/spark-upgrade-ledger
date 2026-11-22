@@ -101,11 +101,18 @@ else:
                     t(profile, "correction", id=item.id), key=f"corr-{code}-{item.id}"
                 )
             st.session_state["reviews"][item.id] = Review(decision=decision, corrected_text=correction)
+            if decision == "correct" and not correction.strip():
+                st.warning(t(profile, "correction_required"))
 
-    approved = tuple(
-        item for item in result.items
-        if st.session_state["reviews"].get(item.id, Review("accept")).decision != "reject"
-    )
+    def is_approved(item) -> bool:
+        review = st.session_state["reviews"].get(item.id, Review("accept"))
+        if review.decision == "reject":
+            return False
+        if review.decision == "correct" and not review.corrected_text.strip():
+            return False
+        return True
+
+    approved = tuple(item for item in result.items if is_approved(item))
     st.caption(t(profile, "approved", n=len(approved), total=len(result.items)))
 
     artifact = {
@@ -114,6 +121,7 @@ else:
         "approved": [
             {
                 **item.__dict__,
+                "generated_title": item.title,
                 "decision": st.session_state["reviews"].get(item.id, Review("accept")).decision,
                 "corrected_text": st.session_state["reviews"].get(item.id, Review("accept")).corrected_text,
             }

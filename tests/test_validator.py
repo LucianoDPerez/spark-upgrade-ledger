@@ -1,12 +1,14 @@
 import unittest
 
 from src.domain import ValidationError
+from src.source import parse_source
 from src.validator import parse_draft, validate_draft
 
 SOURCE = (
     "cortiq 0.8.67 adds a native CUDA backend, and Spark-X2.6-4B is the first model it runs.\n"
     "Past 8192 tokens the Turbo far field takes over, on CUDA as well."
 )
+SOURCE_DOC = parse_source(SOURCE)
 
 
 def payload(**overrides):
@@ -47,18 +49,18 @@ class ParseDraftTests(unittest.TestCase):
 
 class ValidateDraftTests(unittest.TestCase):
     def test_accepts_grounded_item(self):
-        outcome = validate_draft(payload(), SOURCE)
+        outcome = validate_draft(payload(), SOURCE_DOC)
         items = outcome.items
         self.assertEqual(items[0].id, "C1")
         self.assertFalse(items[0].breaking)
 
     def test_rejects_invented_number(self):
         with self.assertRaisesRegex(ValidationError, "invented number"):
-            validate_draft(payload(title="cortiq 9.9.9 agrega backend"), SOURCE)
+            validate_draft(payload(title="cortiq 9.9.9 agrega backend"), SOURCE_DOC)
 
     def test_rejects_ungrounded_quote(self):
         with self.assertRaisesRegex(ValidationError, "not grounded"):
-            validate_draft(payload(source_quote="CUDA desaparece en 0.8.67"), SOURCE)
+            validate_draft(payload(source_quote="CUDA desaparece en 0.8.67"), SOURCE_DOC)
 
     def test_rejects_inverted_negation(self):
         source = "The engine does not support CUDA on this card."
@@ -68,18 +70,18 @@ class ValidateDraftTests(unittest.TestCase):
             source_quote="does not support CUDA",
         )
         with self.assertRaisesRegex(ValidationError, "negation inverted"):
-            validate_draft(bad, source)
+            validate_draft(bad, parse_source(source))
 
     def test_rejects_duplicate_ids(self):
         import json
 
         duplicate = {"items": [payload()["items"][0], payload()["items"][0]]}
         with self.assertRaisesRegex(ValidationError, "Duplicate id"):
-            validate_draft(duplicate, SOURCE)
+            validate_draft(duplicate, SOURCE_DOC)
 
     def test_rejects_empty_items(self):
         with self.assertRaisesRegex(ValidationError, "1 to"):
-            validate_draft({"items": []}, SOURCE)
+            validate_draft({"items": []}, SOURCE_DOC)
 
     def test_drops_duplicate_quote_with_warning(self):
         import json
@@ -87,9 +89,33 @@ class ValidateDraftTests(unittest.TestCase):
         second = payload()["items"][0].copy()
         second["id"] = "C2"
         raw = {"items": [payload()["items"][0], second]}
-        outcome = validate_draft(raw, SOURCE)
+        outcome = validate_draft(raw, SOURCE_DOC)
         self.assertEqual(len(outcome.items), 1)
         self.assertTrue(any("duplicate" in w for w in outcome.warnings))
+
+
+    def test_rejects_quote_spanning_two_lines(self):
+        import json
+
+        crossed = payload(source_quote="model it runs. Past 8192 tokens the Turbo far field")
+        with self.assertRaisesRegex(ValidationError, "single line"):
+            validate_draft(crossed, SOURCE_DOC)
+
+    def test_drops_second_item_from_same_line(self):
+        import json
+
+        first = payload()["items"][0]
+        second = payload()["items"][0].copy()
+        second["id"] = "C2"
+        second["title"] = "otra afirmacion"
+        outcome = validate_draft({"items": [first, second]}, SOURCE_DOC)
+        self.assertEqual(len(outcome.items), 1)
+        self.assertTrue(any("source line" in w for w in outcome.warnings))
+
+    def test_line_number_is_assigned_during_validation(self):
+        outcome = validate_draft(payload(), SOURCE_DOC)
+        self.assertEqual(outcome.items[0].line_start, 1)
+        self.assertEqual(outcome.items[0].line_end, 1)
 
 
 if __name__ == "__main__":
