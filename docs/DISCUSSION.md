@@ -122,6 +122,8 @@ version: 0.9.0 (build 12110, commit cd959bae9)
 built with AppleClang 17.0.0.17000604 for Darwin arm64
 ```
 
+The matching Q4_K_M blob (3,543,441,312 bytes, cached locally on 2026-10-21) was already present in the HF cache, so no weights were fetched during the recorded runs.
+
 Inference settings: `temperature=0.2`, `top_p=0.95`, `top_k=20`, `repeat_penalty=1.05`, `max_tokens=1200`, `chat_template_kwargs={"enable_thinking": false}`. Prompts: `src/prompts.py` + `src/languages.py`.
 
 Code: https://github.com/LucianoDPerez/spark-upgrade-ledger
