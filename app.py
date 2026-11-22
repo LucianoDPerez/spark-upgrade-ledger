@@ -21,8 +21,19 @@ def get_usecase() -> BuildChecklistUseCase:
     return BuildChecklistUseCase(auditor=SkillAuditor())
 
 
-uploaded = st.file_uploader("Notas de lanzamiento (.txt)", type=["txt"])
-if uploaded is not None:
+uploaded = st.file_uploader(
+    "Notas de lanzamiento (.txt) — el botón abre el selector de archivos del sistema",
+    type=["txt"],
+)
+pasted = st.text_area(
+    "O pegá el texto de las notas acá (no necesitás subir un archivo)",
+    height=140,
+    placeholder="cortiq 0.8.67 adds a native CUDA backend...",
+)
+if pasted.strip():
+    source_text = pasted
+    source_name = "notas_pegadas.txt"
+elif uploaded is not None:
     source_text = uploaded.getvalue().decode("utf-8")
     source_name = uploaded.name
 else:
