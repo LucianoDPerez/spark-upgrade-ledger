@@ -4,20 +4,20 @@
   "approved": [
     {
       "id": "C1",
-      "title": "Adds a native CUDA backend and Spark-X2.6-4B as the first model it runs",
-      "affects": "Spark-X2.6-4B",
+      "title": "Adds a native CUDA backend to CMF 0.8.67",
+      "affects": "CMF 0.8.67 native CUDA backend",
       "source_quote": "[1] A follow-up to #22 and #33. [cortiq](https://github.com/infosave2007/cmf) 0.8.67 adds a native CUDA backend, and Spark-X2.6-4B is the first model it runs: https://huggingface.co/infosave/Spark-X2.6-4B-turbo-CUDA-cmf",
       "breaking": false,
       "line_start": 1,
       "line_end": 1,
-      "generated_title": "Adds a native CUDA backend and Spark-X2.6-4B as the first model it runs",
+      "generated_title": "Adds a native CUDA backend to CMF 0.8.67",
       "decision": "accept",
       "corrected_text": ""
     },
     {
       "id": "C3",
       "title": "Past 8 192 tokens the Turbo far field takes over, on CUDA as well, so decode speed and memory stop growing with the prompt",
-      "affects": "Turbo far field",
+      "affects": "Turbo far field on CUDA",
       "source_quote": "[3] Past 8 192 tokens the Turbo far field takes over, on CUDA as well, so decode speed and memory stop growing with the prompt:",
       "breaking": false,
       "line_start": 3,

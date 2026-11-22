@@ -8,7 +8,7 @@ import streamlit as st
 
 from src.audit import SkillAuditor
 from src.config import DEFAULT_INPUT
-from src.domain import Review
+from src.domain import Review, is_approved
 from src.languages import PROFILES, get_profile, t
 from src.usecase import BuildChecklistUseCase, ChecklistRequest
 
@@ -78,6 +78,7 @@ else:
         )
 
     st.subheader(t(profile, "review"))
+    st.caption(t(profile, "decision_hint"))
     canonical = ("accept", "correct", "reject")
     labels = [t(profile, d) for d in canonical]
     for item in result.items:
@@ -86,15 +87,15 @@ else:
             st.markdown(f"**[{item.id}]** {marker} — {item.title}")
             st.write(t(profile, "affects", value=item.affects))
             st.caption(t(profile, "line", number=item.line_start, quote=item.source_quote))
-            current = st.session_state["reviews"].get(item.id, Review("accept")).decision
+            current = st.session_state["reviews"].get(item.id, Review("pending")).decision
             chosen_label = st.radio(
                 t(profile, "decision", id=item.id),
                 labels,
-                index=canonical.index(current),
+                index=canonical.index(current) if current in canonical else None,
                 key=f"decision-{code}-{item.id}",
                 horizontal=True,
             )
-            decision = canonical[labels.index(chosen_label)]
+            decision = canonical[labels.index(chosen_label)] if chosen_label in labels else "pending"
             correction = ""
             if decision == "correct":
                 correction = st.text_input(
@@ -104,15 +105,10 @@ else:
             if decision == "correct" and not correction.strip():
                 st.warning(t(profile, "correction_required"))
 
-    def is_approved(item) -> bool:
-        review = st.session_state["reviews"].get(item.id, Review("accept"))
-        if review.decision == "reject":
-            return False
-        if review.decision == "correct" and not review.corrected_text.strip():
-            return False
-        return True
-
-    approved = tuple(item for item in result.items if is_approved(item))
+    approved = tuple(
+        item for item in result.items
+        if is_approved(st.session_state["reviews"].get(item.id))
+    )
     st.caption(t(profile, "approved", n=len(approved), total=len(result.items)))
 
     artifact = {
@@ -122,8 +118,8 @@ else:
             {
                 **item.__dict__,
                 "generated_title": item.title,
-                "decision": st.session_state["reviews"].get(item.id, Review("accept")).decision,
-                "corrected_text": st.session_state["reviews"].get(item.id, Review("accept")).corrected_text,
+                "decision": st.session_state["reviews"].get(item.id, Review("pending")).decision,
+                "corrected_text": st.session_state["reviews"].get(item.id, Review("pending")).corrected_text,
             }
             for item in approved
         ],

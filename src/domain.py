@@ -76,6 +76,17 @@ class Review:
     corrected_text: str = ""
 
 
+def is_approved(review: Review | None) -> bool:
+    """Only an explicit accept or a non-empty correction counts as approval."""
+    if review is None:
+        return False
+    if review.decision == "accept":
+        return True
+    if review.decision == "correct" and review.corrected_text.strip():
+        return True
+    return False
+
+
 @dataclass(frozen=True)
 class ValidationOutcome:
     items: tuple[ChecklistItem, ...]
@@ -96,7 +107,6 @@ class ChecklistResult:
     def approved_items(self) -> tuple[ChecklistItem, ...]:
         out = []
         for item in self.items:
-            review = self.reviews.get(item.id)
-            if review is None or review.decision == "accept":
+            if is_approved(self.reviews.get(item.id)):
                 out.append(item)
         return tuple(out)
