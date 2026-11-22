@@ -33,6 +33,22 @@ Model source, revision and step performed by Spark:
 Other models, tools or services and their roles:
 None for inference. `requests` calls the fixed local endpoint. The skill's Python scripts are deterministic and local. No cloud API, no other LLM.
 
+## Languages
+
+The UI, the generation prompt and the human review controls are available in **English, Español and 中文**. Select the language at the top of the app, or use `run.py --lang en|es|zh`.
+
+The model card declares `en` and `zh` only. Spanish is a transfer observation, not a declared capability, and is reported as such.
+
+Evidence — one real local run per language, same source excerpt, Q4_K_M, no fabricated output:
+
+| Language | Generation | Items | Skill claims | Gaps |
+|---|---:|---:|---:|---:|
+| English | 18,404 ms | 3 | 5 | 1 |
+| Español | 19,989 ms | 3 | 5 | 3 |
+| 中文 | 21,420 ms | 3 | 4 | 2 |
+
+Artifacts: `evidence/run-en.json`, `evidence/run-es.json`, `evidence/run-zh.json`. `source_quote` stays verbatim English in all three languages because the quote must be an exact substring of the source; only `title` and `affects` are localized.
+
 ## Demo (required: video or illustrated walkthrough)
 
 Video link or screenshots with captions: illustrated demo below (two consecutive screenshots of the real running app).
@@ -41,9 +57,17 @@ Video link or screenshots with captions: illustrated demo below (two consecutive
 
 *Screenshot 1 — the app starts with the default public release-note excerpt. The "Upload" button opens the operating system's native file picker; a text area below lets reviewers paste release notes directly when a native file dialog is unavailable or inconvenient.*
 
-![2. Generated checklist with source line and human decision per item](https://raw.githubusercontent.com/LucianoDPerez/spark-upgrade-ledger/main/docs/shot-02-output.png)
+![2. English output](https://raw.githubusercontent.com/LucianoDPerez/spark-upgrade-ledger/main/docs/shot-02-output-en.png)
 
-*Screenshot 2 — real local generation (19,110 ms), raw Spark JSON expandable, skill audit summary (`status=partial`, 5 claims, 3 gaps), and accept / correct / reject controls with the exact source line under every item.*
+*Screenshot 2 — English UI: real local generation (16,411 ms), raw Spark JSON expandable, skill audit summary, and accept / correct / reject controls with the exact source line under every item.*
+
+![3. Spanish output](https://raw.githubusercontent.com/LucianoDPerez/spark-upgrade-ledger/main/docs/shot-03-output-es.png)
+
+*Screenshot 3 — Spanish UI (23,979 ms). A deterministic warning is visible: a duplicate source quote was dropped. The failure is shown, not hidden.*
+
+![4. Chinese output](https://raw.githubusercontent.com/LucianoDPerez/spark-upgrade-ledger/main/docs/shot-04-output-zh.png)
+
+*Screenshot 4 — Chinese UI (19,446 ms) with the same pipeline and a fully localized review surface.*
 
 ### Evidence: verbatim raw Spark output (run `run-03.json`, 21,578 ms)
 
@@ -78,10 +102,10 @@ Code or runnable example: https://github.com/LucianoDPerez/spark-upgrade-ledger
 ## Results and limitations
 
 Observed results, evaluation method and sample size:
-18/18 unit tests pass without the model (structure, invented numbers, quote grounding, negation, duplicate quotes, cache, audit contract). One real local run produced 3 accepted items from 3 source lines; all 3 quotes are exact substrings of their numbered lines; generation took 21.6 s; the skill reported 5 claims with 2 supported and 3 insufficient. This is a development check on one short excerpt, not a blind benchmark or a user study.
+21/21 unit tests pass without the model (structure, invented numbers, quote grounding, negation, duplicate quotes, cache, audit contract, language profiles). Three real local runs, one per language, each produced 3 items from 3 source lines; every quote is an exact substring of its numbered line; generation ranged 18.4–21.4 s. The skill reported 5 claims in en/es and 4 in zh, with `status=partial` in all three. This is a development check on one short excerpt, not a blind benchmark or a user study.
 
 Failures, improvements and points requiring human review:
-- First real run produced two items with the same source quote. A deterministic dedup gate now drops the duplicate and emits a visible warning; the second run had no duplicates.
+- First real run produced two items with the same source quote. A deterministic dedup gate now drops the duplicate and emits a visible warning. The warning appeared again in a later Spanish UI run (screenshot 3): it is a real recurring model failure, shown to reviewers rather than suppressed.
 - The skill's claim splitter fragments Spanish text (`breaking=False)`), leaving 3 claims `insufficient` even though the exact-substring gate accepted the quotes. We report the disagreement instead of hiding it.
 - `breaking` is checked for type only; its semantic correctness against the source is not proven by a deterministic gate and needs human review.
 - The negation guard is keyword-based and will miss paraphrases.

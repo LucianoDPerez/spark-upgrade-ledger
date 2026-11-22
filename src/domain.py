@@ -82,6 +82,7 @@ class ChecklistResult:
     source_name: str
     items: tuple[ChecklistItem, ...]
     raw_output: str
+    lang: str = "es"
     audit: dict = field(default_factory=dict)
     warnings: tuple[str, ...] = ()
     duration_ms: int = 0

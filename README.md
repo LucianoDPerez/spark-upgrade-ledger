@@ -55,6 +55,12 @@ public release notes (numbered lines)
 - Real local run (`outputs/run-03.json`): 3 items, all quotes are exact substrings of numbered source lines, generation **21,578 ms**, audit `status=partial` with 5 claims (2 supported, 3 insufficient).
 - Submission deadline: 2026-11-30 23:59 UTC. Issue: https://github.com/XHToken/Spark-X2.6/issues/32
 
+## Languages
+
+UI copy, generation prompt and review controls are localized in **English**, **Español** and **中文**. Select the language in the app or run `python3 run.py --lang en|es|zh`. `src/languages.py` holds all profiles; `source_quote` stays verbatim in every language because the validator requires an exact substring of the source. The model card declares en and zh; Spanish is a transfer observation, not a declared capability.
+
+Three real CLI runs and three UI screenshots are committed under `evidence/` and `docs/`.
+
 ## Repository access
 
 `main` is protected: changes require a pull request with 1 approving review from the code owner (`.github/CODEOWNERS` -> `@LucianoDPerez`), stale approvals are dismissed, the last push must be approved, conversations must be resolved, force pushes and branch deletions are blocked. Only the owner has write access to the repository. Only the owner can bypass the rule.

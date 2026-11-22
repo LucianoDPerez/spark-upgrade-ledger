@@ -1,0 +1,242 @@
+{
+  "source": {
+    "name": "release_notes.txt",
+    "url": "https://huggingface.co/XHToken/Spark-X2.6-4B/discussions/34"
+  },
+  "lang": "en",
+  "items": [
+    {
+      "id": "C1",
+      "title": "cortiq 0.8.67 adds a native CUDA backend",
+      "affects": "cortiq 0.8.67",
+      "source_quote": "cortiq 0.8.67 adds a native CUDA backend, and Spark-X2.6-4B is the first model it runs.",
+      "breaking": false,
+      "line_start": 1,
+      "line_end": 1
+    },
+    {
+      "id": "C2",
+      "title": "The files are the same single CMF files as before; only the engine's path to the card is new",
+      "affects": "CMF files",
+      "source_quote": "The files are the same single CMF files as before; only the engine's path to the card is new.",
+      "breaking": false,
+      "line_start": 2,
+      "line_end": 2
+    },
+    {
+      "id": "C3",
+      "title": "Past 8192 tokens the Turbo far field takes over, on CUDA as well, so decode speed and memory stop growing with the prompt",
+      "affects": "Turbo far field",
+      "source_quote": "Past 8192 tokens the Turbo far field takes over, on CUDA as well, so decode speed and memory stop growing with the prompt.",
+      "breaking": false,
+      "line_start": 3,
+      "line_end": 3
+    }
+  ],
+  "raw_output": "{\"items\":[{\"id\":\"C1\",\"title\":\"cortiq 0.8.67 adds a native CUDA backend\",\"affects\":\"cortiq 0.8.67\",\"source_quote\":\"cortiq 0.8.67 adds a native CUDA backend, and Spark-X2.6-4B is the first model it runs.\",\"breaking\":false},{\"id\":\"C2\",\"title\":\"The files are the same single CMF files as before; only the engine's path to the card is new\",\"affects\":\"CMF files\",\"source_quote\":\"The files are the same single CMF files as before; only the engine's path to the card is new.\",\"breaking\":false},{\"id\":\"C3\",\"title\":\"Past 8192 tokens the Turbo far field takes over, on CUDA as well, so decode speed and memory stop growing with the prompt\",\"affects\":\"Turbo far field\",\"source_quote\":\"Past 8192 tokens the Turbo far field takes over, on CUDA as well, so decode speed and memory stop growing with the prompt.\",\"breaking\":false}]}",
+  "warnings": [],
+  "duration_ms": 18404,
+  "audit": {
+    "status": "partial",
+    "answer": "C1: cortiq 0.8.67 adds a native CUDA backend (affects cortiq 0.8.67; breaking=False)\nC2: The files are the same single CMF files as before; only the engine's path to the card is new (affects CMF files; breaking=False)\nC3: Past 8192 tokens the Turbo far field takes over, on CUDA as well, so decode speed and memory stop growing with the prompt (affects Turbo far field; breaking=False)",
+    "claims": [
+      {
+        "claim_id": "claim-4f0a5fec4f437822",
+        "text": "C1: cortiq 0.8.67 adds a native CUDA backend (affects cortiq 0.8.67",
+        "status": "supported",
+        "confidence": 0.894431,
+        "evidence_ids": [
+          "evidence-369cea65b847ab60"
+        ],
+        "conflict_ids": []
+      },
+      {
+        "claim_id": "claim-6d126d49e373994e",
+        "text": "breaking=False)",
+        "status": "insufficient",
+        "confidence": 0.0,
+        "evidence_ids": [],
+        "conflict_ids": []
+      },
+      {
+        "claim_id": "claim-48ec4db9b8804085",
+        "text": "C2: The files are the same single CMF files as before",
+        "status": "supported",
+        "confidence": 0.763875,
+        "evidence_ids": [
+          "evidence-d7003997405a1f62"
+        ],
+        "conflict_ids": []
+      },
+      {
+        "claim_id": "claim-6d8da821dade27ba",
+        "text": "only the engine's path to the card is new (affects CMF files",
+        "status": "supported",
+        "confidence": 0.752123,
+        "evidence_ids": [
+          "evidence-d7003997405a1f62"
+        ],
+        "conflict_ids": []
+      },
+      {
+        "claim_id": "claim-baec876740047103",
+        "text": "C3: Past 8192 tokens the Turbo far field takes over, on CUDA as well, so decode speed and memory stop growing with the prompt (affects Turbo far field",
+        "status": "supported",
+        "confidence": 0.996243,
+        "evidence_ids": [
+          "evidence-f0fa5d28f0d3e3d2"
+        ],
+        "conflict_ids": []
+      }
+    ],
+    "evidence": [
+      {
+        "evidence_id": "evidence-369cea65b847ab60",
+        "source_id": "source-c7fdcc9afdd317f9",
+        "excerpt": "cortiq 0.8.67 adds a native CUDA backend, and Spark-X2.6-4B is the first model it runs.",
+        "relation": "context",
+        "quality_score": 0.7775,
+        "locator": {
+          "page_start": null,
+          "page_end": null,
+          "line_start": 1,
+          "line_end": 1,
+          "symbol": "",
+          "url": ""
+        },
+        "rationale": "综合来源质量评分 0.78（来源可核验性 0.55、定位完整性 0.75、检索相关性 1.00、片段完整性 1.00）",
+        "metadata": {
+          "chunk_id": 1,
+          "score": 1.0,
+          "quality_components": {
+            "verifiability": 0.55,
+            "traceability": 0.75,
+            "retrieval_relevance": 1.0,
+            "excerpt_integrity": 1.0
+          }
+        }
+      },
+      {
+        "evidence_id": "evidence-d7003997405a1f62",
+        "source_id": "source-113de3c767f18323",
+        "excerpt": "The files are the same single CMF files as before; only the engine's path to the card is new.",
+        "relation": "context",
+        "quality_score": 0.7775,
+        "locator": {
+          "page_start": null,
+          "page_end": null,
+          "line_start": 2,
+          "line_end": 2,
+          "symbol": "",
+          "url": ""
+        },
+        "rationale": "综合来源质量评分 0.78（来源可核验性 0.55、定位完整性 0.75、检索相关性 1.00、片段完整性 1.00）",
+        "metadata": {
+          "chunk_id": 2,
+          "score": 1.0,
+          "quality_components": {
+            "verifiability": 0.55,
+            "traceability": 0.75,
+            "retrieval_relevance": 1.0,
+            "excerpt_integrity": 1.0
+          }
+        }
+      },
+      {
+        "evidence_id": "evidence-f0fa5d28f0d3e3d2",
+        "source_id": "source-4d68d10db122b189",
+        "excerpt": "Past 8192 tokens the Turbo far field takes over, on CUDA as well, so decode speed and memory stop growing with the prompt.",
+        "relation": "context",
+        "quality_score": 0.7775,
+        "locator": {
+          "page_start": null,
+          "page_end": null,
+          "line_start": 3,
+          "line_end": 3,
+          "symbol": "",
+          "url": ""
+        },
+        "rationale": "综合来源质量评分 0.78（来源可核验性 0.55、定位完整性 0.75、检索相关性 1.00、片段完整性 1.00）",
+        "metadata": {
+          "chunk_id": 3,
+          "score": 1.0,
+          "quality_components": {
+            "verifiability": 0.55,
+            "traceability": 0.75,
+            "retrieval_relevance": 1.0,
+            "excerpt_integrity": 1.0
+          }
+        }
+      }
+    ],
+    "conflicts": [],
+    "gaps": [
+      "结论“breaking=False)”缺少足以支持或反驳的证据。"
+    ],
+    "sources": [
+      {
+        "source_id": "source-c7fdcc9afdd317f9",
+        "title": "release_notes.txt line 1",
+        "source_type": "text",
+        "path": "",
+        "url": "https://huggingface.co/XHToken/Spark-X2.6-4B/discussions/34",
+        "metadata": {}
+      },
+      {
+        "source_id": "source-113de3c767f18323",
+        "title": "release_notes.txt line 2",
+        "source_type": "text",
+        "path": "",
+        "url": "https://huggingface.co/XHToken/Spark-X2.6-4B/discussions/34",
+        "metadata": {}
+      },
+      {
+        "source_id": "source-4d68d10db122b189",
+        "title": "release_notes.txt line 3",
+        "source_type": "text",
+        "path": "",
+        "url": "https://huggingface.co/XHToken/Spark-X2.6-4B/discussions/34",
+        "metadata": {}
+      }
+    ],
+    "run_meta": {
+      "retrieval_strategy": "exact_line",
+      "answer_mode": "generated_checklist",
+      "duration_ms": 18404,
+      "degraded_services": [],
+      "warnings": [
+        "claim claim-6d126d49e373994e has no aligned evidence"
+      ]
+    },
+    "assessments": [
+      {
+        "claim_id": "claim-4f0a5fec4f437822",
+        "evidence_id": "evidence-369cea65b847ab60",
+        "relation": "supports",
+        "confidence": 0.894431,
+        "rationale": "结论与证据包含相同的明确数值（共同关键词：0.8、67、adds、backend、cortiq、cuda；相同数值：0.8）"
+      },
+      {
+        "claim_id": "claim-48ec4db9b8804085",
+        "evidence_id": "evidence-d7003997405a1f62",
+        "relation": "supports",
+        "confidence": 0.763875,
+        "rationale": "结论与证据具有较高文本对齐度且未发现显式冲突（共同关键词：before、cmf、files、same、single）"
+      },
+      {
+        "claim_id": "claim-6d8da821dade27ba",
+        "evidence_id": "evidence-d7003997405a1f62",
+        "relation": "supports",
+        "confidence": 0.752123,
+        "rationale": "结论与证据具有较高文本对齐度且未发现显式冲突（共同关键词：card、cmf、engine、files、only、path）"
+      },
+      {
+        "claim_id": "claim-baec876740047103",
+        "evidence_id": "evidence-f0fa5d28f0d3e3d2",
+        "relation": "supports",
+        "confidence": 0.996243,
+        "rationale": "结论与证据包含相同的明确数值（共同关键词：8192、cuda、decode、far、field、growing；相同数值：8192）"
+      }
+    ]
+  }
+}

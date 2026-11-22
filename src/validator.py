@@ -10,9 +10,13 @@ from .domain import ChecklistItem, ValidationError, ValidationOutcome, normalize
 
 _ITEM_KEYS = {"id", "title", "affects", "source_quote", "breaking"}
 _NUMBER_RE = re.compile(r"\d+(?:[.,]\d+)*")
-_NEGATION_RE = re.compile(r"\b(no|not|never|none|without|neither|nor|sin)\b", re.IGNORECASE)
+_NEGATION_RE = re.compile(
+    r"(?:\b(no|not|never|none|without|neither|nor|sin|nunca)\b)|(不|没有|未|无法|非)",
+    re.IGNORECASE,
+)
 _AFFIRM_RE = re.compile(
-    r"\b(soporta|supported|enabled|habilitado|disponible|available|funciona|works)\b",
+    r"(?:\b(soporta|supported|enabled|habilitado|disponible|available|funciona|works)\b)"
+    r"|(支持|可用|启用|正常|兼容)",
     re.IGNORECASE,
 )
 _ID_RE = re.compile(r"^C\d{1,2}$")

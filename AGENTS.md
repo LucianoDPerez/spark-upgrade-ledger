@@ -17,7 +17,8 @@ HER Hack-Astron #8 entry. Turns public Spark-X2.6 release notes into an upgrade 
 - `src/config.py` — single source of truth. No magic numbers elsewhere.
 - `src/domain.py` — pure entities, no framework imports. `normalize()` + `cache_key` implement deduplication.
 - `src/source.py` — parses release notes into numbered lines with provenance. Deterministic, no model.
-- `src/prompts.py` — Spanish system prompt. Output is strict JSON with `source_quote` per item. No invented numbers, no diagnoses.
+- `src/languages.py` — single source of truth for UI copy and per-language system prompts (en, es, zh). `source_quote` stays verbatim in every language because the validator requires an exact substring of the source.
+- `src/prompts.py` — shared user prompt. Output is strict JSON with `source_quote` per item. No invented numbers, no diagnoses.
 - `src/llm_client.py` — `LLMPort` protocol + `LlamaServerClient`. Fixed URL only (no SSRF). Always send `chat_template_kwargs: {enable_thinking: False}` — Spark-X2.6 fills the token budget with reasoning otherwise and returns empty content.
 - `src/validator.py` — deterministic fail-closed gates: exact schema, no invented numbers, exact quote grounding, basic negation guard. Reject before cache and before screen.
 - `src/audit.py` — adapter to the installed SkillHub skill. Builds the documented JSON contract and runs the skill's `scripts/audit_evidence.py`. Fail closed on bad input or bad output.

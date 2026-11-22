@@ -9,8 +9,9 @@ from .audit import SkillAuditor
 from .cache import TTLCache
 from .config import MODEL_REVISION, SKILL_VERSION
 from .domain import ChecklistResult, ValidationError, cache_key
+from .languages import get_profile
 from .llm_client import LLMPort, LlamaServerClient
-from .prompts import SYSTEM_PROMPT, build_user_prompt
+from .prompts import build_user_prompt
 from .ratelimit import MinIntervalLimiter
 from .source import parse_source
 from .validator import parse_draft, validate_draft
@@ -20,6 +21,7 @@ from .validator import parse_draft, validate_draft
 class ChecklistRequest:
     source_text: str
     source_name: str = "release_notes.txt"
+    lang: str = "es"
 
 
 class BuildChecklistUseCase:
@@ -38,8 +40,9 @@ class BuildChecklistUseCase:
     def execute(self, request: ChecklistRequest) -> ChecklistResult:
         if not isinstance(request, ChecklistRequest):
             raise ValidationError("Invalid request.")
+        profile = get_profile(request.lang)
         source = parse_source(request.source_text, request.source_name)
-        key = cache_key(source.normalized_text(), MODEL_REVISION, SKILL_VERSION)
+        key = cache_key(source.normalized_text(), MODEL_REVISION, SKILL_VERSION, profile.code)
 
         cached = self.cache.get(key)
         if isinstance(cached, ChecklistResult):
@@ -47,7 +50,7 @@ class BuildChecklistUseCase:
 
         self.limiter.check()
         started = time.monotonic()
-        raw = self.llm.complete(SYSTEM_PROMPT, build_user_prompt(source.as_prompt()))
+        raw = self.llm.complete(profile.system_prompt, build_user_prompt(source.as_prompt()))
         duration_ms = int((time.monotonic() - started) * 1000)
         outcome = validate_draft(parse_draft(raw), source.normalized_text())
         items = tuple(
@@ -60,6 +63,7 @@ class BuildChecklistUseCase:
             source_name=source.name,
             items=items,
             raw_output=raw,
+            lang=profile.code,
             warnings=outcome.warnings,
             duration_ms=duration_ms,
         )
