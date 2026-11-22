@@ -39,7 +39,7 @@ Video link or screenshots with captions: illustrated demo below (two consecutive
 
 ![1. Initial state: release-note input and generate button](https://raw.githubusercontent.com/LucianoDPerez/spark-upgrade-ledger/main/docs/shot-01-input.png)
 
-*Screenshot 1 — the app starts with the default public release-note excerpt and a single action.*
+*Screenshot 1 — the app starts with the default public release-note excerpt. The "Upload" button opens the operating system's native file picker; a text area below lets reviewers paste release notes directly when a native file dialog is unavailable or inconvenient.*
 
 ![2. Generated checklist with source line and human decision per item](https://raw.githubusercontent.com/LucianoDPerez/spark-upgrade-ledger/main/docs/shot-02-output.png)
 
