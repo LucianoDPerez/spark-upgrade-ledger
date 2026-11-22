@@ -61,7 +61,7 @@ Artifacts: `evidence/run-en.json`, `evidence/run-es.json`, `evidence/run-zh.json
 
 ## Demo (required: video or illustrated walkthrough)
 
-Illustrated walkthrough — four consecutive screenshots of **one single English run** (generation 22,545 ms). The example is preloaded and there is no file uploader at all, so the only action is the Generate button, visible without scrolling. A reviewer can replace the text by pasting into the text box; no native file dialog is involved.
+Illustrated walkthrough — four consecutive screenshots of **one single English run** (generation 21,063 ms). The example is preloaded and there is no file uploader at all, so the only action is the Generate button, visible without scrolling. A reviewer can replace the text by pasting into the text box; no native file dialog is involved.
 
 ![1. Preloaded input and visible Generate button](https://raw.githubusercontent.com/LucianoDPerez/spark-upgrade-ledger/main/docs/shot-01-input.png)
 
@@ -69,7 +69,7 @@ Illustrated walkthrough — four consecutive screenshots of **one single English
 
 ![2. Raw Spark output and audit summary](https://raw.githubusercontent.com/LucianoDPerez/spark-upgrade-ledger/main/docs/shot-02-raw-output.png)
 
-*Screenshot 2 — `Local generation: 22545 ms`, SkillHub audit `status=partial, claims=8, gaps=4`, raw Spark JSON expandable, and the human review section below. At this point the counter reads `Approved: 0 of 3`: nothing is approved implicitly.*
+*Screenshot 2 — `Local generation: 21063 ms`, SkillHub audit `status=partial, claims=8, gaps=4`, raw Spark JSON expandable, and the human review section below. At this point the counter reads `Approved: 0 of 3`: nothing is approved implicitly.*
 
 ![3. All three items and exported artifact](https://raw.githubusercontent.com/LucianoDPerez/spark-upgrade-ledger/main/docs/shot-03-review-approve.png)
 
@@ -77,12 +77,12 @@ Illustrated walkthrough — four consecutive screenshots of **one single English
 
 ![4. Human rejects one item](https://raw.githubusercontent.com/LucianoDPerez/spark-upgrade-ledger/main/docs/shot-04-review-reject.png)
 
-*Screenshot 4 — the end of the same run: C2 rejected, C3 accepted, `Approved: 2 of 3` and the export button. The exported artifact from this exact interaction is `evidence/ui-final-artifact.json`; it contains only the two approved items, each with `generated_title`, `decision` and `corrected_text`.*
+*Screenshot 4 — the end of the same run: C2 rejected, C3 accepted, `Approved: 2 of 3`, and two export buttons. `evidence/ui-final-artifact.json` contains only the two approved items; `evidence/ui-review-log.json` contains all three items with their original text, decision, correction and approval flag, including the rejected C2.*
 
 ### Verbatim raw Spark output from that run
 
 ```json
-{"items":[{"id":"C1","title":"Adds a native CUDA backend to CMF 0.8.67","affects":"CMF 0.8.67 native CUDA backend","source_quote":"[1] A follow-up to #22 and #33. [cortiq](https://github.com/infosave2007/cmf) 0.8.67 adds a native CUDA backend, and Spark-X2.6-4B is the first model it runs: https://huggingface.co/infosave/Spark-X2.6-4B-turbo-CUDA-cmf","breaking":false},{"id":"C2","title":"Files remain the same single CMF files; only the engine's path to the card is new","affects":"CMF engine path to the card","source_quote":"[2] The files are the same single CMF files as before; only the engine's path to the card is new. On an NVIDIA A40, the 4-bit file, with the same engine over Vulkan on the same card in parentheses:","breaking":false},{"id":"C3","title":"Past 8 192 tokens the Turbo far field takes over, on CUDA as well, so decode speed and memory stop growing with the prompt","affects":"Turbo far field on CUDA","source_quote":"[3] Past 8 192 tokens the Turbo far field takes over, on CUDA as well, so decode speed and memory stop growing with the prompt:","breaking":false}]}
+{"items":[{"id":"C1","title":"Adds a native CUDA backend and first model Spark-X2.6-4B","affects":"Spark-X2.6-4B","source_quote":"[1] A follow-up to #22 and #33. [cortiq](https://github.com/infosave2007/cmf) 0.8.67 adds a native CUDA backend, and Spark-X2.6-4B is the first model it runs: https://huggingface.co/infosave/Spark-X2.6-4B-turbo-CUDA-cmf","breaking":false},{"id":"C2","title":"New engine path to the card for the same CMF files","affects":"CMF files","source_quote":"[2] The files are the same single CMF files as before; only the engine's path to the card is new. On an NVIDIA A40, the 4-bit file, with the same engine over Vulkan on the same card in parentheses:","breaking":false},{"id":"C3","title":"Past 8 192 tokens the Turbo far field takes over on CUDA, stopping decode speed and memory growth with the prompt","affects":"Turbo far field","source_quote":"[3] Past 8 192 tokens the Turbo far field takes over, on CUDA as well, so decode speed and memory stop growing with the prompt:","breaking":false}]}
 ```
 
 Also committed as `evidence/ui-raw-output.json`. The exported artifact from the human rejection is `evidence/ui-final-artifact.json`, and the full skill audit report for the same source is in `evidence/run-en.json`.
@@ -111,7 +111,7 @@ Code: https://github.com/LucianoDPerez/spark-upgrade-ledger
 ## Results and limitations
 
 Observed results, method and sample size:
-30/30 unit tests pass without the model, including explicit-approval cases (no review, pending, empty correction, accept, reject). Three real local runs (one per language) each produced 3 items from 3 source lines; every quote is grounded in exactly one numbered line; generation 21.7–25.0 s. The validator rejects cross-line quotes and allows at most one item per source line. The auditor receives no artificial `score=1.0`; the skill's neutral default applies. A `correct` decision with empty text cannot be approved or exported. One UI run produced the four screenshots above and an exported artifact with one human rejection. The auditor received all source lines and still returned `status=partial` in every run. This is a development check on one short excerpt, not a blind benchmark or a user study.
+31/31 unit tests pass without the model, including explicit-approval cases (no review, pending, empty correction, accept, reject) and the separation between the final checklist and the full review log. Three real local runs (one per language) each produced 3 items from 3 source lines; every quote is grounded in exactly one numbered line; generation 21.7–25.0 s. The validator rejects cross-line quotes and allows at most one item per source line. The auditor receives no artificial `score=1.0`; the skill's neutral default applies. A `correct` decision with empty text cannot be approved or exported. One UI run produced the four screenshots above and an exported artifact with one human rejection. The auditor received all source lines and still returned `status=partial` in every run. This is a development check on one short excerpt, not a blind benchmark or a user study.
 
 Failures, improvements, human review:
 - An early run emitted two items with the same source quote; a deterministic dedup gate now drops the duplicate and shows a visible warning.

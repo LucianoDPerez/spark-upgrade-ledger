@@ -52,7 +52,7 @@ public release notes (numbered lines)
 - Model: `spark2.6-4B`, revision `fe31f8d64890302cc3a1d365d700357b4b75ba77`, GGUF Q4_K_M, ctx 16384, file SHA256 `91cb2811aebb47ac916aa619d27d4cdd7f4143106b7917accb8ead4cd7f5cbd9`.
 - Skill: `global/research-evidence-auditor` v`20260820.034025`, [detail page](https://skill.xfyun.cn/space/global/research-evidence-auditor), installed with SkillHub CLI 0.3.1. All 22 files match the hashes in `.skillhub/metadata.json`.
 - Hardware/runtime: Apple M1, 16 GB RAM, macOS 15.5, llama.cpp `0.9.0` build `12110` commit `cd959bae9`.
-- Unit tests: **30/30 pass**, no model needed, including explicit-approval cases (pending, empty correction, accept, reject).
+- Unit tests: **31/31 pass**, no model needed, including explicit-approval cases (pending, empty correction, accept, reject) and the final-vs-review-log split.
 - Three real local runs (`evidence/run-en.json`, `run-es.json`, `run-zh.json`): 3 items each, every quote grounded in exactly one numbered source line (source text verbatim from HF discussion #34), generation 21,669 / 24,958 / 23,960 ms. The audit receives **all source lines** as evidence, never only the model's own quotes, and no artificial `score=1.0`; status `partial` with 8 / 8 / 7 claims.
 - Submission deadline: 2026-11-30 23:59 UTC. Issue: https://github.com/XHToken/Spark-X2.6/issues/32
 

@@ -8,7 +8,7 @@ import streamlit as st
 
 from src.audit import SkillAuditor
 from src.config import DEFAULT_INPUT
-from src.domain import Review, is_approved
+from src.domain import Review, build_exports, is_approved
 from src.languages import PROFILES, get_profile, t
 from src.usecase import BuildChecklistUseCase, ChecklistRequest
 
@@ -20,8 +20,11 @@ code = next(c for c, p in PROFILES.items() if p.label == selected_label)
 
 if st.session_state.get("lang") != code:
     st.session_state["lang"] = code
+    st.session_state["run_id"] = st.session_state.get("run_id", 0) + 1
     st.session_state.pop("result", None)
     st.session_state.pop("reviews", None)
+
+run_id = st.session_state.get("run_id", 0)
 
 profile = get_profile(code)
 
@@ -48,6 +51,7 @@ if st.button(t(profile, "generate"), type="primary"):
         result = get_usecase().execute(
             ChecklistRequest(source_text=source_text, source_name=source_name, lang=code)
         )
+        st.session_state["run_id"] = st.session_state.get("run_id", 0) + 1
         st.session_state["result"] = result
         st.session_state["reviews"] = {}
     except Exception as exc:
@@ -92,14 +96,14 @@ else:
                 t(profile, "decision", id=item.id),
                 labels,
                 index=canonical.index(current) if current in canonical else None,
-                key=f"decision-{code}-{item.id}",
+                key=f"decision-{run_id}-{code}-{item.id}",
                 horizontal=True,
             )
             decision = canonical[labels.index(chosen_label)] if chosen_label in labels else "pending"
             correction = ""
             if decision == "correct":
                 correction = st.text_input(
-                    t(profile, "correction", id=item.id), key=f"corr-{code}-{item.id}"
+                    t(profile, "correction", id=item.id), key=f"corr-{run_id}-{code}-{item.id}"
                 )
             st.session_state["reviews"][item.id] = Review(decision=decision, corrected_text=correction)
             if decision == "correct" and not correction.strip():
@@ -111,23 +115,16 @@ else:
     )
     st.caption(t(profile, "approved", n=len(approved), total=len(result.items)))
 
-    artifact = {
-        "source": result.source_name,
-        "lang": result.lang,
-        "approved": [
-            {
-                **item.__dict__,
-                "generated_title": item.title,
-                "decision": st.session_state["reviews"].get(item.id, Review("pending")).decision,
-                "corrected_text": st.session_state["reviews"].get(item.id, Review("pending")).corrected_text,
-            }
-            for item in approved
-        ],
-        "audit_status": audit.get("status", ""),
-    }
+    artifact, review_log = build_exports(result, st.session_state["reviews"])
     st.download_button(
         t(profile, "download"),
         data=json.dumps(artifact, ensure_ascii=False, indent=2),
         file_name="upgrade-ledger.json",
+        mime="application/json",
+    )
+    st.download_button(
+        t(profile, "download_log"),
+        data=json.dumps(review_log, ensure_ascii=False, indent=2),
+        file_name="upgrade-ledger-review-log.json",
         mime="application/json",
     )

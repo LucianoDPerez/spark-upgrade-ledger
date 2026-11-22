@@ -87,6 +87,42 @@ def is_approved(review: Review | None) -> bool:
     return False
 
 
+def build_exports(result: "ChecklistResult", reviews: dict[str, Review]) -> tuple[dict, dict]:
+    """Return (final approved checklist, full human review log)."""
+    common = {
+        "source": result.source_name,
+        "lang": result.lang,
+        "audit_status": result.audit.get("status", ""),
+    }
+    final = {
+        **common,
+        "approved": [
+            {
+                **item.__dict__,
+                "generated_title": item.title,
+                "decision": reviews.get(item.id, Review("pending")).decision,
+                "corrected_text": reviews.get(item.id, Review("pending")).corrected_text,
+            }
+            for item in result.items
+            if is_approved(reviews.get(item.id))
+        ],
+    }
+    log = {
+        **common,
+        "items": [
+            {
+                **item.__dict__,
+                "generated_title": item.title,
+                "decision": reviews.get(item.id, Review("pending")).decision,
+                "corrected_text": reviews.get(item.id, Review("pending")).corrected_text,
+                "approved": is_approved(reviews.get(item.id)),
+            }
+            for item in result.items
+        ],
+    }
+    return final, log
+
+
 @dataclass(frozen=True)
 class ValidationOutcome:
     items: tuple[ChecklistItem, ...]
