@@ -45,6 +45,14 @@ Video link or screenshots with captions: illustrated demo below (two consecutive
 
 *Screenshot 2 — real local generation (19,110 ms), raw Spark JSON expandable, skill audit summary (`status=partial`, 5 claims, 3 gaps), and accept / correct / reject controls with the exact source line under every item.*
 
+### Evidence: verbatim raw Spark output (run `run-03.json`, 21,578 ms)
+
+```json
+{"items":[{"id":"C1","title":"cortiq 0.8.67 añade un backend CUDA nativo y Spark-X2.6-4B es el primer modelo que ejecuta","affects":"cortiq 0.8.67","source_quote":"cortiq 0.8.67 adds a native CUDA backend, and Spark-X2.6-4B is the first model it runs.","breaking":false},{"id":"C2","title":"Los archivos son los mismos archivos CMF anteriores; solo el camino del motor a la tarjeta es nuevo","affects":"archivos CMF","source_quote":"The files are the same single CMF files as before; only the engine's path to the card is new.","breaking":false},{"id":"C3","title":"Más allá de 8192 tokens el campo lejano de Turbo toma el control, también en CUDA, por lo que la velocidad de decodificación y la memoria dejan de crecer con el prompt","affects":"Turbo far field","source_quote":"Past 8192 tokens the Turbo far field takes over, on CUDA as well, so decode speed and memory stop growing with the prompt.","breaking":false}]}
+```
+
+The same artifact, including the full skill report, is committed as `evidence/run-03.json` in the repository.
+
 Actual input → raw Spark output → final artifact → human review:
 - Input: `data/release_notes.txt` (3 attributed public lines).
 - Raw Spark output: verbatim JSON stored in `outputs/run-03.json` under `raw_output`.
