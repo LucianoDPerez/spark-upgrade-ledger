@@ -5,6 +5,14 @@
 Project name: Upgrade Ledger
 Track: Developer tools
 
+## Why this matters (30-second version)
+
+1. **Problem:** a developer updating a local model has to read a long release-note style post and decide what actually changed. Missing a breaking change costs hours.
+2. **Why Spark is needed:** one identifiable step — turning the source into a structured checklist — runs fully local. No cloud call, no other model for generation.
+3. **What SkillHub adds that Spark cannot guarantee:** an independent claim-by-claim audit against the **whole** source. The model never audits its own output; the skill does.
+4. **Traceability:** every item carries an exact numbered source line; the deterministic gates reject cross-line quotes and invented numbers; the artifact preserves the generated text and the human correction separately.
+5. **Why a human still decides:** each item must be accepted, corrected with non-empty text, or rejected. Screenshot 4 shows a real rejection changing `Approved: 3 of 3` to `2 of 3`. The system is not designed to auto-approve everything the model emits.
+
 ## User and task
 
 Who uses the result, and what problem do they face?
